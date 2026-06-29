@@ -23,6 +23,13 @@ export async function createArea(name: string) {
   return { success: true };
 }
 
+export async function updateArea(id: string, name: string) {
+  const { error } = await supabase.from('areas').update({ name }).eq('id', id);
+  if (error) throw new Error(error.message);
+
+  return { success: true };
+}
+
 export async function deleteArea(id: string) {
   const { error } = await supabase.from('areas').delete().eq('id', id);
   if (error) throw new Error(error.message);
@@ -38,6 +45,21 @@ export async function createRole(
   const { error } = await supabase
     .from('roles')
     .insert({ name, area_id, is_system_admin });
+  if (error) throw new Error(error.message);
+
+  return { success: true };
+}
+
+export async function updateRole(
+  id: string,
+  name: string,
+  area_id: string,
+  is_system_admin: boolean
+) {
+  const { error } = await supabase
+    .from('roles')
+    .update({ name, area_id, is_system_admin })
+    .eq('id', id);
   if (error) throw new Error(error.message);
 
   return { success: true };

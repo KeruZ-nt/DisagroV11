@@ -3,9 +3,11 @@ import {
   createRole,
   deleteArea,
   deleteRole,
+  updateArea,
+  updateRole,
 } from '@/lib/api/management';
 import { useQueryClient } from '@tanstack/react-query';
-import { FolderGit2, Network, Shield, Trash2 } from 'lucide-react';
+import { FolderGit2, Network, Pencil, Shield, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 
 export type AreaData = { id: string; name: string };
@@ -13,6 +15,7 @@ export type RoleData = {
   id: string;
   name: string;
   is_system_admin: boolean;
+  area_id?: string;
   areas?: { name: string };
 };
 
@@ -26,20 +29,26 @@ export function ManagementView({
   // Area Form
   const [areaName, setAreaName] = useState('');
   const [isSavingArea, setIsSavingArea] = useState(false);
+  const [editingArea, setEditingArea] = useState<AreaData | null>(null);
 
   // Role Form
   const [roleName, setRoleName] = useState('');
   const [roleAreaId, setRoleAreaId] = useState('');
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [isSavingRole, setIsSavingRole] = useState(false);
+  const [editingRole, setEditingRole] = useState<RoleData | null>(null);
 
   const handleCreateArea = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSavingArea(true);
     try {
-      await createArea(areaName);
+      if (editingArea) {
+        await updateArea(editingArea.id, areaName);
+      } else {
+        await createArea(areaName);
+      }
       queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
-      setAreaName('');
+      resetAreaForm();
     } catch (err) {
       alert((err as Error).message);
     } finally {
@@ -47,21 +56,38 @@ export function ManagementView({
     }
   };
 
+  const resetAreaForm = () => {
+    setAreaName('');
+    setEditingArea(null);
+  };
+
   const handleCreateRole = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSavingRole(true);
     try {
       if (!roleAreaId) throw new Error('Debes seleccionar un área');
-      await createRole(roleName, roleAreaId, isSystemAdmin);
+      
+      if (editingRole) {
+        await updateRole(editingRole.id, roleName, roleAreaId, isSystemAdmin);
+      } else {
+        await createRole(roleName, roleAreaId, isSystemAdmin);
+      }
+      
       queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
       queryClient.invalidateQueries({ queryKey: ['roles'] });
-      setRoleName('');
-      setIsSystemAdmin(false);
+      resetRoleForm();
     } catch (err) {
       alert((err as Error).message);
     } finally {
       setIsSavingRole(false);
     }
+  };
+
+  const resetRoleForm = () => {
+    setRoleName('');
+    setRoleAreaId('');
+    setIsSystemAdmin(false);
+    setEditingRole(null);
   };
 
   return (
@@ -105,9 +131,19 @@ export function ManagementView({
         {activeTab === 'areas' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 bg-slate-900/50 border border-white/5 rounded-2xl p-6 h-fit">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <FolderGit2 className="w-5 h-5 text-emerald-400" />
-                Nueva Área
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <FolderGit2 className="w-5 h-5 text-emerald-400" />
+                  {editingArea ? 'Editar Área' : 'Nueva Área'}
+                </span>
+                {editingArea && (
+                  <button
+                    onClick={resetAreaForm}
+                    className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    <X className="w-4 h-4 text-slate-400" />
+                  </button>
+                )}
               </h3>
               <form onSubmit={handleCreateArea} className="space-y-4">
                 <div className="space-y-1.5">
@@ -127,7 +163,7 @@ export function ManagementView({
                   disabled={isSavingArea}
                   className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
                 >
-                  {isSavingArea ? 'Guardando...' : 'Crear Área'}
+                  {isSavingArea ? 'Guardando...' : (editingArea ? 'Actualizar Área' : 'Crear Área')}
                 </button>
               </form>
             </div>
@@ -161,17 +197,30 @@ export function ManagementView({
                         {area.name}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={async () => {
-                            await deleteArea(area.id);
-                            queryClient.invalidateQueries({
-                              queryKey: ['managementAreasAndRoles'],
-                            });
-                          }}
-                          className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingArea(area);
+                              setAreaName(area.name);
+                            }}
+                            className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (confirm('¿Estás seguro de que deseas eliminar esta área?')) {
+                                await deleteArea(area.id);
+                                queryClient.invalidateQueries({
+                                  queryKey: ['managementAreasAndRoles'],
+                                });
+                              }
+                            }}
+                            className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -184,9 +233,19 @@ export function ManagementView({
         {activeTab === 'roles' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 bg-slate-900/50 border border-white/5 rounded-2xl p-6 h-fit">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-emerald-400" />
-                Nuevo Rol
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-emerald-400" />
+                  {editingRole ? 'Editar Rol' : 'Nuevo Rol'}
+                </span>
+                {editingRole && (
+                  <button
+                    onClick={resetRoleForm}
+                    className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    <X className="w-4 h-4 text-slate-400" />
+                  </button>
+                )}
               </h3>
               <form onSubmit={handleCreateRole} className="space-y-4">
                 <div className="space-y-1.5">
@@ -237,7 +296,7 @@ export function ManagementView({
                   disabled={isSavingRole}
                   className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
                 >
-                  {isSavingRole ? 'Guardando...' : 'Crear Rol'}
+                  {isSavingRole ? 'Guardando...' : (editingRole ? 'Actualizar Rol' : 'Crear Rol')}
                 </button>
               </form>
             </div>
@@ -291,20 +350,35 @@ export function ManagementView({
                         )}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={async () => {
-                            await deleteRole(role.id);
-                            queryClient.invalidateQueries({
-                              queryKey: ['managementAreasAndRoles'],
-                            });
-                            queryClient.invalidateQueries({
-                              queryKey: ['roles'],
-                            });
-                          }}
-                          className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingRole(role);
+                              setRoleName(role.name);
+                              setRoleAreaId(role.area_id || '');
+                              setIsSystemAdmin(role.is_system_admin);
+                            }}
+                            className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (confirm('¿Estás seguro de que deseas eliminar este rol?')) {
+                                await deleteRole(role.id);
+                                queryClient.invalidateQueries({
+                                  queryKey: ['managementAreasAndRoles'],
+                                });
+                                queryClient.invalidateQueries({
+                                  queryKey: ['roles'],
+                                });
+                              }
+                            }}
+                            className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

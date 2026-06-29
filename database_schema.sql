@@ -150,10 +150,16 @@ CREATE POLICY "Anyone can update their own avatar." ON storage.objects FOR UPDAT
 -- ==============================================================================
 -- 💡 DATOS INICIALES (Semilla)
 -- ==============================================================================
-INSERT INTO public.roles (name, is_system_admin) VALUES 
-('Administración - Super Admin', true),
-('Ventas - Ejecutivo', false),
-('Operaciones', false)
+INSERT INTO public.areas (id, name) VALUES 
+('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'Administración'),
+('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', 'Ventas'),
+('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', 'Operaciones')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.roles (name, is_system_admin, area_id) VALUES 
+('Super Admin', true, 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'),
+('Ejecutivo', false, 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22'),
+('Especialista', false, 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33')
 ON CONFLICT DO NOTHING;
 
 -- Dar permisos EXPLÍCITOS a los roles
