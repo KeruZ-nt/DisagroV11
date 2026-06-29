@@ -8,7 +8,9 @@ import {
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-export function ExcelUploadDropzone() {
+export function ExcelUploadDropzone({
+  onUploadComplete,
+}: { onUploadComplete?: () => void }) {
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -72,6 +74,7 @@ export function ExcelUploadDropzone() {
       if (result.success) {
         setStatus('success');
         setMessage(`¡${products.length} productos procesados correctamente!`);
+        onUploadComplete?.();
       } else {
         throw new Error(result.error || 'Error procesando archivo');
       }
