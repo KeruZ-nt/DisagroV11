@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { updateProformaStatus } from '@/lib/api/proformas';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -35,7 +36,7 @@ export function StatusSelect({
       queryClient.invalidateQueries({ queryKey: ['proformas'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
     } catch (err) {
-      alert((err as Error).message || 'Error al actualizar el estado');
+      toast.error((err as Error).message || 'Error al actualizar el estado');
       setLocalStatus(prevStatus); // Revert on error
     } finally {
       setIsUpdating(false);

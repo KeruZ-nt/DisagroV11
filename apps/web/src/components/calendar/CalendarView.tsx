@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 // @ts-nocheck
 
 import { deleteCalendarEvent, updateCalendarEvent } from '@/lib/api/calendar';
@@ -73,7 +74,7 @@ export function CalendarView({
   ) => {
     e.stopPropagation(); // Prevenir abrir el modal al intentar borrar
     if (isAuto) {
-      alert(
+      toast.error(
         'Este evento se genera automáticamente por una proforma. No se puede eliminar aquí.'
       );
       return;
@@ -85,7 +86,7 @@ export function CalendarView({
         await deleteCalendarEvent(id);
         handleSuccess();
       } catch (e: unknown) {
-        alert(e instanceof Error ? e.message : 'Error eliminando evento');
+        toast.error(e instanceof Error ? e.message : 'Error eliminando evento');
         setLocalEvents(initialEvents); // Revert
       }
     }
@@ -150,7 +151,7 @@ export function CalendarView({
       queryClient.invalidateQueries({ queryKey: ['proformas'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
     } catch (err) {
-      alert('Error al reprogramar el evento');
+      toast.error('Error al reprogramar el evento');
       setLocalEvents(initialEvents); // Revert on failure
     }
   };
@@ -275,7 +276,7 @@ export function CalendarView({
                         onClick={(e) =>
                           handleDelete(event.id, event.is_auto, e)
                         }
-                        className="absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover/event:opacity-100 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800 rounded p-1 shadow-md"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800 rounded p-1 shadow-md"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>

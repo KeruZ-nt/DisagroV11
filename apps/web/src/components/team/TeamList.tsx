@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { Edit, Mail, Shield, Trash2, User, UserPlus } from 'lucide-react';
 import { useState } from 'react';
@@ -26,7 +27,7 @@ export function TeamList({
   const queryClient = useQueryClient();
 
   const handleDelete = (id: string, name: string) => {
-    alert(
+    toast.error(
       `La eliminación de ${name} requiere acceso a Supabase por seguridad en esta versión.`
     );
   };
@@ -139,7 +140,7 @@ export function TeamList({
                   </td>
                   {isAdmin && (
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-end gap-2 transition-opacity">
                         <button
                           onClick={() => setEditingMember(member)}
                           className="p-2 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"

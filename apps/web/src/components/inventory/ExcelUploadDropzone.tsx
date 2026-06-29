@@ -91,7 +91,7 @@ export function ExcelUploadDropzone({
 
   return (
     <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 relative overflow-hidden group">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent transition-opacity" />
 
       <div className="relative flex flex-col items-center justify-center text-center">
         <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/10 group-hover:border-emerald-500/30 group-hover:bg-emerald-500/10 transition-colors">

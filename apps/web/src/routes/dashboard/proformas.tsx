@@ -185,7 +185,7 @@ function ProformasPage() {
                     />
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex justify-center gap-2 transition-opacity">
                       <DownloadPdfButton
                         proformaData={prof.rawData}
                         total={prof.total}

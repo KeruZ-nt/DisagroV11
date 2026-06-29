@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { updateUserProfile } from '@/lib/api/settings';
 import { supabase } from '@/lib/supabase';
 import { useNavigate } from '@tanstack/react-router';
@@ -36,7 +37,7 @@ export function ProfileForm({
       await updateUserProfile(profile.id, { name });
       setToastMessage('Cambios guardados correctamente.');
     } catch (err) {
-      alert((err as Error).message || 'Error al guardar');
+      toast.error((err as Error).message || 'Error al guardar');
     } finally {
       setIsSaving(false);
     }
@@ -66,7 +67,7 @@ export function ProfileForm({
       setAvatarUrl(publicUrl);
       setToastMessage('Avatar actualizado correctamente.');
     } catch (error) {
-      alert(`Error al subir imagen: ${(error as Error).message}`);
+      toast.error(`Error al subir imagen: ${(error as Error).message}`);
     } finally {
       setIsUploading(false);
     }
@@ -101,7 +102,7 @@ export function ProfileForm({
             )}
 
             {/* Overlay para subir */}
-            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity">
+            <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center cursor-pointer transition-opacity">
               {isUploading ? (
                 <Loader2 className="w-6 h-6 text-white animate-spin" />
               ) : (

@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import {
   createArea,
   createRole,
@@ -66,7 +67,7 @@ export function ManagementView({
       queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
       resetAreaForm();
     } catch (err) {
-      alert((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setIsSavingArea(false);
     }
@@ -93,7 +94,7 @@ export function ManagementView({
       queryClient.invalidateQueries({ queryKey: ['roles'] });
       resetRoleForm();
     } catch (err) {
-      alert((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setIsSavingRole(false);
     }

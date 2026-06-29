@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 import { Loader2, Shield, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -55,7 +56,7 @@ export function EditRoleModal({
       onSuccess();
       onClose();
     } catch (err) {
-      alert((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setIsSaving(false);
     }

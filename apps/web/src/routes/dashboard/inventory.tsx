@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { ExcelUploadDropzone } from '@/components/inventory/ExcelUploadDropzone';
 import { ProductModal } from '@/components/inventory/ProductModal';
 import { deleteProduct, getProducts } from '@/lib/api/inventory';
@@ -40,7 +41,7 @@ function InventoryPage() {
         await deleteProduct(id);
         refetch();
       } catch (err) {
-        alert(`Error al eliminar producto: ${(err as Error).message}`);
+        toast.error(`Error al eliminar producto: ${(err as Error).message}`);
       }
     }
   };
@@ -164,7 +165,7 @@ function InventoryPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex justify-center gap-2 transition-opacity">
                         <button
                           onClick={() => handleEdit(product)}
                           className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 rounded transition-colors"

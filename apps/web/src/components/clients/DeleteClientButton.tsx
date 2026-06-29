@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { deleteClientRecord } from '@/lib/api/clients';
 import { AlertTriangle, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -16,7 +17,7 @@ export function DeleteClientButton({
       setIsOpen(false);
     } catch (error) {
       console.error('Error al eliminar:', error);
-      alert(`No se pudo eliminar el cliente. ${(error as Error).message}`);
+      toast.error(`No se pudo eliminar el cliente. ${(error as Error).message}`);
     } finally {
       setIsDeleting(false);
     }

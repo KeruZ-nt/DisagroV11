@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { ProformaDocument } from './ProformaDocument'; // Importación correcta
@@ -30,7 +31,7 @@ export function DownloadPdfButton({
       document.body.removeChild(link);
     } catch (error) {
       console.error('Error generando PDF', error);
-      alert('Hubo un error al generar el PDF.');
+      toast.error('Hubo un error al generar el PDF.');
     } finally {
       setIsGenerating(false);
     }

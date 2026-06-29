@@ -224,7 +224,7 @@ export function NotificationBell({ userId }: { userId: string }) {
                               handleMarkAsRead(notif.id);
                             }}
                             title="Marcar como leída"
-                            className="text-slate-500 hover:text-emerald-400 hover:bg-emerald-500/10 p-1.5 rounded-lg flex-shrink-0 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            className="text-slate-500 hover:text-emerald-400 hover:bg-emerald-500/10 p-1.5 rounded-lg flex-shrink-0 transition-all focus:opacity-100"
                           >
                             <Check className="w-4 h-4" />
                           </button>
