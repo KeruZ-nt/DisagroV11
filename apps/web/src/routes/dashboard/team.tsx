@@ -25,7 +25,10 @@ function TeamPage() {
           *,
           roles (
             name,
-            is_system_admin
+            is_system_admin,
+            areas (
+              name
+            )
           )
         `)
         .order('created_at', { ascending: false });
@@ -41,7 +44,7 @@ function TeamPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from('roles')
-        .select('*')
+        .select('*, areas(name)')
         .order('name');
       return data || [];
     },

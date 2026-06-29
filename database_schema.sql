@@ -16,11 +16,11 @@ DROP TABLE IF EXISTS public.users CASCADE;
 DROP TABLE IF EXISTS public.areas CASCADE;
 DROP TABLE IF EXISTS public.roles CASCADE;
 
--- 2. Tabla de ROLES
 CREATE TABLE public.roles (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   name text NOT NULL UNIQUE,
   is_system_admin boolean DEFAULT false,
+  area_id uuid REFERENCES public.areas(id) ON DELETE CASCADE,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
