@@ -226,12 +226,18 @@ export function ManagementView({
                           </button>
                           <button
                             onClick={async () => {
-                              if (confirm('¿Estás seguro de que deseas eliminar esta área?')) {
-                                await deleteArea(area.id);
-                                queryClient.invalidateQueries({
-                                  queryKey: ['managementAreasAndRoles'],
-                                });
-                              }
+                              toast('¿Estás seguro de que deseas eliminar esta área?', {
+                                action: {
+                                  label: 'Eliminar',
+                                  onClick: async () => {
+                                    await deleteArea(area.id);
+                                    queryClient.invalidateQueries({
+                                      queryKey: ['managementAreasAndRoles'],
+                                    });
+                                  },
+                                },
+                                cancel: { label: 'Cancelar', onClick: () => {} },
+                              });
                             }}
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                           >
@@ -381,15 +387,21 @@ export function ManagementView({
                           </button>
                           <button
                             onClick={async () => {
-                              if (confirm('¿Estás seguro de que deseas eliminar este rol?')) {
-                                await deleteRole(role.id);
-                                queryClient.invalidateQueries({
-                                  queryKey: ['managementAreasAndRoles'],
-                                });
-                                queryClient.invalidateQueries({
-                                  queryKey: ['roles'],
-                                });
-                              }
+                              toast('¿Estás seguro de que deseas eliminar este rol?', {
+                                action: {
+                                  label: 'Eliminar',
+                                  onClick: async () => {
+                                    await deleteRole(role.id);
+                                    queryClient.invalidateQueries({
+                                      queryKey: ['managementAreasAndRoles'],
+                                    });
+                                    queryClient.invalidateQueries({
+                                      queryKey: ['roles'],
+                                    });
+                                  },
+                                },
+                                cancel: { label: 'Cancelar', onClick: () => {} },
+                              });
                             }}
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                           >

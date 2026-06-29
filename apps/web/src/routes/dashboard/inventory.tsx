@@ -36,14 +36,20 @@ function InventoryPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-      try {
-        await deleteProduct(id);
-        refetch();
-      } catch (err) {
-        toast.error(`Error al eliminar producto: ${(err as Error).message}`);
-      }
-    }
+    toast('¿Estás seguro de eliminar este producto?', {
+      action: {
+        label: 'Eliminar',
+        onClick: async () => {
+          try {
+            await deleteProduct(id);
+            refetch();
+          } catch (err) {
+            toast.error(`Error al eliminar producto: ${(err as Error).message}`);
+          }
+        },
+      },
+      cancel: { label: 'Cancelar', onClick: () => {} },
+    });
   };
 
   return (

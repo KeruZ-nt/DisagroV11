@@ -203,10 +203,20 @@ function ProformasPage() {
                       />
                       <button
                         onClick={async () => {
-                          if (confirm('¿Eliminar proforma?')) {
-                            await deleteProforma(prof.id, prof.projectId);
-                            refetch();
-                          }
+                          toast('¿Eliminar proforma?', {
+                            action: {
+                              label: 'Eliminar',
+                              onClick: async () => {
+                                try {
+                                  await deleteProforma(prof.id);
+                                  refetch();
+                                } catch (e) {
+                                  toast.error((e as Error).message);
+                                }
+                              },
+                            },
+                            cancel: { label: 'Cancelar', onClick: () => {} },
+                          });
                         }}
                         title="Eliminar"
                         className="text-slate-400 hover:text-red-400 transition-colors p-1.5 rounded hover:bg-red-500/10"

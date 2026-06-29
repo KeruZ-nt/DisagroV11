@@ -79,17 +79,26 @@ export function CalendarView({
       );
       return;
     }
-    if (confirm('¿Estás seguro de eliminar este evento?')) {
-      // Optimistic delete
-      setLocalEvents((prev) => prev.filter((ev) => ev.id !== id));
-      try {
-        await deleteCalendarEvent(id);
-        handleSuccess();
-      } catch (e: unknown) {
-        toast.error(e instanceof Error ? e.message : 'Error eliminando evento');
-        setLocalEvents(initialEvents); // Revert
-      }
-    }
+    toast('¿Estás seguro de eliminar este evento?', {
+      action: {
+        label: 'Eliminar',
+        onClick: async () => {
+          // Optimistic delete
+          setLocalEvents((prev) => prev.filter((ev) => ev.id !== id));
+          try {
+            await deleteCalendarEvent(id);
+            handleSuccess();
+          } catch (e: unknown) {
+            toast.error(e instanceof Error ? e.message : 'Error eliminando evento');
+            setLocalEvents(initialEvents); // Revert
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancelar',
+        onClick: () => {},
+      },
+    });
   };
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
