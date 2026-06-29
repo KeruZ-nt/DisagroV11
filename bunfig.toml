@@ -1,3 +1,0 @@
-[install]
-# use workspace dependencies when available
-workspace = true
