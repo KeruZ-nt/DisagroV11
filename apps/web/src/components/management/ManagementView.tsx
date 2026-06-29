@@ -8,7 +8,7 @@ import {
 } from '@/lib/api/management';
 import { useQueryClient } from '@tanstack/react-query';
 import { FolderGit2, Network, Pencil, Shield, Trash2, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export type AreaData = { id: string; name: string };
 export type RoleData = {
@@ -37,6 +37,22 @@ export function ManagementView({
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [isSavingRole, setIsSavingRole] = useState(false);
   const [editingRole, setEditingRole] = useState<RoleData | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as HTMLElement;
+      if (target.closest('.form-panel')) return;
+      if (target.closest('.edit-btn')) return;
+      
+      if (editingArea) resetAreaForm();
+      if (editingRole) resetRoleForm();
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [editingArea, editingRole]);
 
   const handleCreateArea = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +146,7 @@ export function ManagementView({
       <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6">
         {activeTab === 'areas' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1 bg-slate-900/50 border border-white/5 rounded-2xl p-6 h-fit">
+            <div className="form-panel lg:col-span-1 bg-slate-900/50 border border-white/5 rounded-2xl p-6 h-fit">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <FolderGit2 className="w-5 h-5 text-emerald-400" />
@@ -203,7 +219,7 @@ export function ManagementView({
                               setEditingArea(area);
                               setAreaName(area.name);
                             }}
-                            className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
+                            className="edit-btn p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
@@ -232,7 +248,7 @@ export function ManagementView({
 
         {activeTab === 'roles' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1 bg-slate-900/50 border border-white/5 rounded-2xl p-6 h-fit">
+            <div className="form-panel lg:col-span-1 bg-slate-900/50 border border-white/5 rounded-2xl p-6 h-fit">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center justify-between">
                 <span className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-emerald-400" />
@@ -358,7 +374,7 @@ export function ManagementView({
                               setRoleAreaId(role.area_id || '');
                               setIsSystemAdmin(role.is_system_admin);
                             }}
-                            className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
+                            className="edit-btn p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
