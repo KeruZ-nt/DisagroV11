@@ -102,7 +102,7 @@ export function ProfileForm({
             )}
 
             {/* Overlay para subir */}
-            <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center cursor-pointer transition-opacity">
+            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity">
               {isUploading ? (
                 <Loader2 className="w-6 h-6 text-white animate-spin" />
               ) : (

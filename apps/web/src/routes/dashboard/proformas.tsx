@@ -1,17 +1,23 @@
+import { useState, useMemo } from 'react';
 import { DownloadPdfButton } from '@/components/proformas/DownloadPdfButton';
 import { ProformaModal } from '@/components/proformas/ProformaModal';
 import { StatusSelect } from '@/components/proformas/StatusSelect';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { deleteProforma } from '@/lib/api/proformas';
 import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { FileText, Filter, Search } from 'lucide-react';
+import { FileText, Filter, Search, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/proformas')({
   component: ProformasPage,
 });
 
 function ProformasPage() {
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const { data: sessionData } = useQuery({
     queryKey: ['session'],
     queryFn: async () => {
@@ -93,10 +99,32 @@ function ProformasPage() {
     },
   });
 
+  const handleDeleteConfirm = async () => {
+    if (!deleteTargetId) return;
+    setIsDeleting(true);
+    try {
+      await deleteProforma(deleteTargetId);
+      refetch();
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setIsDeleting(false);
+      setDeleteTargetId(null);
+    }
+  };
+
   if (!sessionData) return null;
 
   return (
     <div className="animate-in fade-in duration-500 h-full flex flex-col min-h-0 pb-2">
+      <ConfirmModal
+        isOpen={!!deleteTargetId}
+        title="Eliminar proforma"
+        message="¿Estás seguro de que deseas eliminar esta proforma? Esta acción no se puede deshacer."
+        isConfirming={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTargetId(null)}
+      />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
@@ -202,38 +230,11 @@ function ProformasPage() {
                         projectId={prof.projectId}
                       />
                       <button
-                        onClick={async () => {
-                          toast('¿Eliminar proforma?', {
-                            action: {
-                              label: 'Eliminar',
-                              onClick: async () => {
-                                try {
-                                  await deleteProforma(prof.id);
-                                  refetch();
-                                } catch (e) {
-                                  toast.error((e as Error).message);
-                                }
-                              },
-                            },
-                            cancel: { label: 'Cancelar', onClick: () => {} },
-                          });
-                        }}
+                        onClick={() => setDeleteTargetId(prof.id)}
                         title="Eliminar"
                         className="text-slate-400 hover:text-red-400 transition-colors p-1.5 rounded hover:bg-red-500/10"
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </td>

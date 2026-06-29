@@ -17,6 +17,7 @@ import {
   subMonths,
 } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import {
   AlertTriangle,
   Calendar as CalendarIcon,
@@ -49,6 +50,8 @@ export function CalendarView({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Record<
     string,
     unknown
@@ -79,26 +82,24 @@ export function CalendarView({
       );
       return;
     }
-    toast('¿Estás seguro de eliminar este evento?', {
-      action: {
-        label: 'Eliminar',
-        onClick: async () => {
-          // Optimistic delete
-          setLocalEvents((prev) => prev.filter((ev) => ev.id !== id));
-          try {
-            await deleteCalendarEvent(id);
-            handleSuccess();
-          } catch (e: unknown) {
-            toast.error(e instanceof Error ? e.message : 'Error eliminando evento');
-            setLocalEvents(initialEvents); // Revert
-          }
-        },
-      },
-      cancel: {
-        label: 'Cancelar',
-        onClick: () => {},
-      },
-    });
+    setDeleteTargetId(id);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTargetId) return;
+    setIsDeleting(true);
+    // Optimistic delete
+    setLocalEvents((prev) => prev.filter((ev) => ev.id !== deleteTargetId));
+    try {
+      await deleteCalendarEvent(deleteTargetId);
+      handleSuccess();
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : 'Error eliminando evento');
+      setLocalEvents(initialEvents); // Revert
+    } finally {
+      setIsDeleting(false);
+      setDeleteTargetId(null);
+    }
   };
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
@@ -317,6 +318,14 @@ export function CalendarView({
 
   return (
     <div className="h-full flex flex-col pb-2">
+      <ConfirmModal
+        isOpen={!!deleteTargetId}
+        title="Eliminar Evento"
+        message="¿Estás seguro de que deseas eliminar este evento del calendario?"
+        isConfirming={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTargetId(null)}
+      />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 flex-shrink-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">

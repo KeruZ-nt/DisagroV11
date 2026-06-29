@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Edit, Package, Plus, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 export const Route = createFileRoute('/dashboard/inventory')({
   component: InventoryPage,
@@ -22,6 +23,8 @@ function InventoryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleCreate = () => {
     setModalMode('create');
@@ -35,25 +38,30 @@ function InventoryPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    toast('¿Estás seguro de eliminar este producto?', {
-      action: {
-        label: 'Eliminar',
-        onClick: async () => {
-          try {
-            await deleteProduct(id);
-            refetch();
-          } catch (err) {
-            toast.error(`Error al eliminar producto: ${(err as Error).message}`);
-          }
-        },
-      },
-      cancel: { label: 'Cancelar', onClick: () => {} },
-    });
+  const handleDeleteConfirm = async () => {
+    if (!deleteTargetId) return;
+    setIsDeleting(true);
+    try {
+      await deleteProduct(deleteTargetId);
+      refetch();
+    } catch (err) {
+      toast.error(`Error al eliminar producto: ${(err as Error).message}`);
+    } finally {
+      setIsDeleting(false);
+      setDeleteTargetId(null);
+    }
   };
 
   return (
     <div className="animate-in fade-in duration-500 h-full flex flex-col min-h-0 pb-2">
+      <ConfirmModal
+        isOpen={!!deleteTargetId}
+        title="Eliminar Producto"
+        message="¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer."
+        isConfirming={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTargetId(null)}
+      />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
@@ -180,9 +188,9 @@ function InventoryPage() {
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDelete(product.id)}
+                          onClick={() => setDeleteTargetId(product.id)}
                           className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors"
-                          title="Eliminar producto"
+                          title="Eliminar"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

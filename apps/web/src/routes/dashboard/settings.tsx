@@ -1,4 +1,5 @@
 import { ProfileForm } from '@/components/settings/ProfileForm';
+import { SecurityForm } from '@/components/settings/SecurityForm';
 import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -85,14 +86,7 @@ function SettingsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4">Seguridad</h2>
-            <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
-              <p className="text-sm text-slate-400">
-                La contraseña se gestiona a través del administrador del
-                sistema. Para cambiar tu contraseña o credenciales de acceso,
-                ponte en contacto con soporte técnico.
-              </p>
-            </div>
+            <SecurityForm currentEmail={profile.email} userId={profile.id} />
           </section>
         </div>
       </div>

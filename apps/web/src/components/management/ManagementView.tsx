@@ -10,6 +10,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { FolderGit2, Network, Pencil, Shield, Trash2, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 
 export type AreaData = { id: string; name: string };
 export type RoleData = {
@@ -38,6 +39,10 @@ export function ManagementView({
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
   const [isSavingRole, setIsSavingRole] = useState(false);
   const [editingRole, setEditingRole] = useState<RoleData | null>(null);
+
+  // Delete Modal State
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string, type: 'area' | 'role' } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -107,8 +112,36 @@ export function ManagementView({
     setEditingRole(null);
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    setIsDeleting(true);
+    try {
+      if (deleteTarget.type === 'area') {
+        await deleteArea(deleteTarget.id);
+        queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
+      } else {
+        await deleteRole(deleteTarget.id);
+        queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
+        queryClient.invalidateQueries({ queryKey: ['roles'] });
+      }
+      setDeleteTarget(null);
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col pb-2">
+      <ConfirmModal
+        isOpen={!!deleteTarget}
+        title={deleteTarget?.type === 'area' ? 'Eliminar Área' : 'Eliminar Rol'}
+        message={deleteTarget?.type === 'area' ? '¿Estás seguro de que deseas eliminar esta área? Se eliminarán también todos los roles asociados a ella.' : '¿Estás seguro de que deseas eliminar este rol?'}
+        isConfirming={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
@@ -225,20 +258,7 @@ export function ManagementView({
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={async () => {
-                              toast('¿Estás seguro de que deseas eliminar esta área?', {
-                                action: {
-                                  label: 'Eliminar',
-                                  onClick: async () => {
-                                    await deleteArea(area.id);
-                                    queryClient.invalidateQueries({
-                                      queryKey: ['managementAreasAndRoles'],
-                                    });
-                                  },
-                                },
-                                cancel: { label: 'Cancelar', onClick: () => {} },
-                              });
-                            }}
+                            onClick={() => setDeleteTarget({ id: area.id, type: 'area' })}
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -386,23 +406,7 @@ export function ManagementView({
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={async () => {
-                              toast('¿Estás seguro de que deseas eliminar este rol?', {
-                                action: {
-                                  label: 'Eliminar',
-                                  onClick: async () => {
-                                    await deleteRole(role.id);
-                                    queryClient.invalidateQueries({
-                                      queryKey: ['managementAreasAndRoles'],
-                                    });
-                                    queryClient.invalidateQueries({
-                                      queryKey: ['roles'],
-                                    });
-                                  },
-                                },
-                                cancel: { label: 'Cancelar', onClick: () => {} },
-                              });
-                            }}
+                            onClick={() => setDeleteTarget({ id: role.id, type: 'role' })}
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />

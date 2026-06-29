@@ -2,6 +2,7 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { Edit, Mail, Shield, Trash2, User, UserPlus } from 'lucide-react';
 import { useState } from 'react';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { CreateUserModal } from './CreateUserModal';
 import { EditRoleModal } from './EditRoleModal';
 
@@ -24,16 +25,24 @@ export function TeamList({
 }: { team: TeamMember[]; isAdmin: boolean; availableRoles: RoleData[] }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+  const [deleteWarning, setDeleteWarning] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const handleDelete = (id: string, name: string) => {
-    toast.error(
-      `La eliminación de ${name} requiere acceso a Supabase por seguridad en esta versión.`
-    );
+    setDeleteWarning(name);
   };
 
   return (
     <>
+      <ConfirmModal
+        isOpen={!!deleteWarning}
+        title="Acción Restringida"
+        message={`La eliminación del usuario ${deleteWarning} requiere acceso directo a Supabase por motivos de seguridad en esta versión. Póngase en contacto con el administrador de la base de datos.`}
+        confirmText="Entendido"
+        cancelText="Cerrar"
+        onConfirm={() => setDeleteWarning(null)}
+        onCancel={() => setDeleteWarning(null)}
+      />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
