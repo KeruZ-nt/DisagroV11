@@ -8,116 +8,116 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root';
-import { Route as DashboardRouteImport } from './routes/dashboard';
-import { Route as DashboardCalendarRouteImport } from './routes/dashboard/calendar';
-import { Route as DashboardClientsRouteImport } from './routes/dashboard/clients';
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index';
-import { Route as DashboardInventoryRouteImport } from './routes/dashboard/inventory';
-import { Route as DashboardManagementRouteImport } from './routes/dashboard/management';
-import { Route as DashboardProformasRouteImport } from './routes/dashboard/proformas';
-import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings';
-import { Route as DashboardTeamRouteImport } from './routes/dashboard/team';
-import { Route as IndexRouteImport } from './routes/index';
-import { Route as LoginIndexRouteImport } from './routes/login/index';
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardTeamRouteImport } from './routes/dashboard/team'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardProformasRouteImport } from './routes/dashboard/proformas'
+import { Route as DashboardManagementRouteImport } from './routes/dashboard/management'
+import { Route as DashboardInventoryRouteImport } from './routes/dashboard/inventory'
+import { Route as DashboardClientsRouteImport } from './routes/dashboard/clients'
+import { Route as DashboardCalendarRouteImport } from './routes/dashboard/calendar'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardTeamRoute = DashboardTeamRouteImport.update({
   id: '/team',
   path: '/team',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardProformasRoute = DashboardProformasRouteImport.update({
   id: '/proformas',
   path: '/proformas',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardManagementRoute = DashboardManagementRouteImport.update({
   id: '/management',
   path: '/management',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardInventoryRoute = DashboardInventoryRouteImport.update({
   id: '/inventory',
   path: '/inventory',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardClientsRoute = DashboardClientsRouteImport.update({
   id: '/clients',
   path: '/clients',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardCalendarRoute = DashboardCalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/dashboard': typeof DashboardRouteWithChildren;
-  '/dashboard/calendar': typeof DashboardCalendarRoute;
-  '/dashboard/clients': typeof DashboardClientsRoute;
-  '/dashboard/inventory': typeof DashboardInventoryRoute;
-  '/dashboard/management': typeof DashboardManagementRoute;
-  '/dashboard/proformas': typeof DashboardProformasRoute;
-  '/dashboard/settings': typeof DashboardSettingsRoute;
-  '/dashboard/team': typeof DashboardTeamRoute;
-  '/dashboard/': typeof DashboardIndexRoute;
-  '/login/': typeof LoginIndexRoute;
+  '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/calendar': typeof DashboardCalendarRoute
+  '/dashboard/clients': typeof DashboardClientsRoute
+  '/dashboard/inventory': typeof DashboardInventoryRoute
+  '/dashboard/management': typeof DashboardManagementRoute
+  '/dashboard/proformas': typeof DashboardProformasRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/login/': typeof LoginIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/dashboard/calendar': typeof DashboardCalendarRoute;
-  '/dashboard/clients': typeof DashboardClientsRoute;
-  '/dashboard/inventory': typeof DashboardInventoryRoute;
-  '/dashboard/management': typeof DashboardManagementRoute;
-  '/dashboard/proformas': typeof DashboardProformasRoute;
-  '/dashboard/settings': typeof DashboardSettingsRoute;
-  '/dashboard/team': typeof DashboardTeamRoute;
-  '/dashboard': typeof DashboardIndexRoute;
-  '/login': typeof LoginIndexRoute;
+  '/': typeof IndexRoute
+  '/dashboard/calendar': typeof DashboardCalendarRoute
+  '/dashboard/clients': typeof DashboardClientsRoute
+  '/dashboard/inventory': typeof DashboardInventoryRoute
+  '/dashboard/management': typeof DashboardManagementRoute
+  '/dashboard/proformas': typeof DashboardProformasRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/login': typeof LoginIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/dashboard': typeof DashboardRouteWithChildren;
-  '/dashboard/calendar': typeof DashboardCalendarRoute;
-  '/dashboard/clients': typeof DashboardClientsRoute;
-  '/dashboard/inventory': typeof DashboardInventoryRoute;
-  '/dashboard/management': typeof DashboardManagementRoute;
-  '/dashboard/proformas': typeof DashboardProformasRoute;
-  '/dashboard/settings': typeof DashboardSettingsRoute;
-  '/dashboard/team': typeof DashboardTeamRoute;
-  '/dashboard/': typeof DashboardIndexRoute;
-  '/login/': typeof LoginIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/calendar': typeof DashboardCalendarRoute
+  '/dashboard/clients': typeof DashboardClientsRoute
+  '/dashboard/inventory': typeof DashboardInventoryRoute
+  '/dashboard/management': typeof DashboardManagementRoute
+  '/dashboard/proformas': typeof DashboardProformasRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/team': typeof DashboardTeamRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/login/': typeof LoginIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
@@ -129,8 +129,8 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/team'
     | '/dashboard/'
-    | '/login/';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/login/'
+  fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard/calendar'
@@ -141,7 +141,7 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/team'
     | '/dashboard'
-    | '/login';
+    | '/login'
   id:
     | '__root__'
     | '/'
@@ -154,106 +154,106 @@ export interface FileRouteTypes {
     | '/dashboard/settings'
     | '/dashboard/team'
     | '/dashboard/'
-    | '/login/';
-  fileRoutesById: FileRoutesById;
+    | '/login/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  DashboardRoute: typeof DashboardRouteWithChildren;
-  LoginIndexRoute: typeof LoginIndexRoute;
+  IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  LoginIndexRoute: typeof LoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/dashboard': {
-      id: '/dashboard';
-      path: '/dashboard';
-      fullPath: '/dashboard';
-      preLoaderRoute: typeof DashboardRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login/': {
-      id: '/login/';
-      path: '/login';
-      fullPath: '/login/';
-      preLoaderRoute: typeof LoginIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
-      id: '/dashboard/';
-      path: '/';
-      fullPath: '/dashboard/';
-      preLoaderRoute: typeof DashboardIndexRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/team': {
-      id: '/dashboard/team';
-      path: '/team';
-      fullPath: '/dashboard/team';
-      preLoaderRoute: typeof DashboardTeamRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/team'
+      path: '/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/settings': {
-      id: '/dashboard/settings';
-      path: '/settings';
-      fullPath: '/dashboard/settings';
-      preLoaderRoute: typeof DashboardSettingsRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/proformas': {
-      id: '/dashboard/proformas';
-      path: '/proformas';
-      fullPath: '/dashboard/proformas';
-      preLoaderRoute: typeof DashboardProformasRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/proformas'
+      path: '/proformas'
+      fullPath: '/dashboard/proformas'
+      preLoaderRoute: typeof DashboardProformasRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/management': {
-      id: '/dashboard/management';
-      path: '/management';
-      fullPath: '/dashboard/management';
-      preLoaderRoute: typeof DashboardManagementRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/management'
+      path: '/management'
+      fullPath: '/dashboard/management'
+      preLoaderRoute: typeof DashboardManagementRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/inventory': {
-      id: '/dashboard/inventory';
-      path: '/inventory';
-      fullPath: '/dashboard/inventory';
-      preLoaderRoute: typeof DashboardInventoryRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/inventory'
+      path: '/inventory'
+      fullPath: '/dashboard/inventory'
+      preLoaderRoute: typeof DashboardInventoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/clients': {
-      id: '/dashboard/clients';
-      path: '/clients';
-      fullPath: '/dashboard/clients';
-      preLoaderRoute: typeof DashboardClientsRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/clients'
+      path: '/clients'
+      fullPath: '/dashboard/clients'
+      preLoaderRoute: typeof DashboardClientsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/calendar': {
-      id: '/dashboard/calendar';
-      path: '/calendar';
-      fullPath: '/dashboard/calendar';
-      preLoaderRoute: typeof DashboardCalendarRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
+      id: '/dashboard/calendar'
+      path: '/calendar'
+      fullPath: '/dashboard/calendar'
+      preLoaderRoute: typeof DashboardCalendarRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
-  DashboardCalendarRoute: typeof DashboardCalendarRoute;
-  DashboardClientsRoute: typeof DashboardClientsRoute;
-  DashboardInventoryRoute: typeof DashboardInventoryRoute;
-  DashboardManagementRoute: typeof DashboardManagementRoute;
-  DashboardProformasRoute: typeof DashboardProformasRoute;
-  DashboardSettingsRoute: typeof DashboardSettingsRoute;
-  DashboardTeamRoute: typeof DashboardTeamRoute;
-  DashboardIndexRoute: typeof DashboardIndexRoute;
+  DashboardCalendarRoute: typeof DashboardCalendarRoute
+  DashboardClientsRoute: typeof DashboardClientsRoute
+  DashboardInventoryRoute: typeof DashboardInventoryRoute
+  DashboardManagementRoute: typeof DashboardManagementRoute
+  DashboardProformasRoute: typeof DashboardProformasRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardTeamRoute: typeof DashboardTeamRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -265,17 +265,17 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardTeamRoute: DashboardTeamRoute,
   DashboardIndexRoute: DashboardIndexRoute,
-};
+}
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren
-);
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
