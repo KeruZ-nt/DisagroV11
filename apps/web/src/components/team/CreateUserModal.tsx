@@ -1,0 +1,187 @@
+import { useNavigate } from '@tanstack/react-router';
+import { Loader2, UserPlus, X } from 'lucide-react';
+import { useState } from 'react';
+
+export function CreateUserModal({
+  isOpen,
+  onClose,
+  availableRoles,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  availableRoles?: { id: string; name: string; areas?: { name: string } }[];
+}) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [roleId, setRoleId] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const navigate = useNavigate();
+
+  // El reseteo de estado se hará ahora al cerrar o al crear exitosamente
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+
+    try {
+      if (!roleId) throw new Error('Debes seleccionar un rol para el usuario.');
+
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role_id: roleId }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Error al crear usuario');
+      }
+
+      onClose();
+    } catch (err) {
+      alert((err as Error).message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleClose = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setRoleId('');
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+        onClick={handleClose}
+      />
+
+      <div className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-800/30">
+          <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+            <UserPlus className="w-5 h-5 text-emerald-400" />
+            Nuevo Miembro
+          </h2>
+          <button
+            onClick={handleClose}
+            className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-full transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-slate-400">
+              Nombre Completo
+            </label>
+            <input
+              required
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+              placeholder="Ej. Juan Pérez"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-slate-400">
+              Correo Electrónico
+            </label>
+            <input
+              required
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+              placeholder="juan@empresa.com"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-slate-400">
+              Contraseña Temporal
+            </label>
+            <input
+              required
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+              placeholder="Mínimo 6 caracteres"
+              minLength={6}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-slate-400">
+              Área y Rol
+            </label>
+            <div className="relative">
+              <select
+                required
+                value={roleId}
+                onChange={(e) => setRoleId(e.target.value)}
+                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all appearance-none pr-10"
+              >
+                <option value="" disabled>
+                  Seleccionar un rol...
+                </option>
+                {availableRoles?.map((r) => (
+                  <option key={r.id} value={r.id} className="bg-slate-900">
+                    {r.areas?.name} - {r.name}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg
+                  className="w-4 h-4 text-slate-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="px-5 py-2 text-slate-300 hover:text-white font-medium transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all shadow-lg shadow-emerald-500/20"
+            >
+              {isSaving ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                'Crear Usuario'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
