@@ -1,5 +1,6 @@
+import { adminAuthClient, supabase } from '@/lib/supabase';
 import { useNavigate } from '@tanstack/react-router';
-import { Loader2, UserPlus, X } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Loader2, UserPlus, X } from 'lucide-react';
 import { useState } from 'react';
 
 export function CreateUserModal({
@@ -16,34 +17,50 @@ export function CreateUserModal({
   const [password, setPassword] = useState('');
   const [roleId, setRoleId] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-
-  // El reseteo de estado se hará ahora al cerrar o al crear exitosamente
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    setErrorMsg('');
 
     try {
       if (!roleId) throw new Error('Debes seleccionar un rol para el usuario.');
 
-      const res = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, role_id: roleId }),
+      // 1. Crear usuario con adminAuthClient (no cierra la sesión actual)
+      const { data: authData, error: authError } = await adminAuthClient.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { name }
       });
 
-      const data = await res.json();
+      if (authError) throw new Error(authError.message);
+      if (!authData.user) throw new Error('Error desconocido al crear usuario');
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Error al crear usuario');
+      // 2. Insertar en la tabla pública users usando el cliente normal
+      const { error: dbError } = await supabase.from('users').insert({
+        id: authData.user.id,
+        name,
+        email,
+        role_id: roleId
+      });
+
+      if (dbError) {
+        // Rollback
+        await adminAuthClient.auth.admin.deleteUser(authData.user.id);
+        throw new Error(dbError.message);
       }
 
-      onClose();
+      handleClose();
+      // Refrescar para ver el nuevo usuario
+      window.location.reload();
     } catch (err) {
-      alert((err as Error).message);
+      setErrorMsg((err as Error).message);
     } finally {
       setIsSaving(false);
     }
@@ -54,6 +71,8 @@ export function CreateUserModal({
     setEmail('');
     setPassword('');
     setRoleId('');
+    setErrorMsg('');
+    setShowPassword(false);
     onClose();
   };
 
@@ -79,6 +98,13 @@ export function CreateUserModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {errorMsg && (
+            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 animate-in fade-in">
+              <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+              <p className="text-sm text-red-200">{errorMsg}</p>
+            </div>
+          )}
+
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-slate-400">
               Nombre Completo
@@ -111,15 +137,29 @@ export function CreateUserModal({
             <label className="text-sm font-medium text-slate-400">
               Contraseña Temporal
             </label>
-            <input
-              required
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
-              placeholder="Mínimo 6 caracteres"
-              minLength={6}
-            />
+            <div className="relative">
+              <input
+                required
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                placeholder="Mínimo 6 caracteres"
+                minLength={6}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-white transition-colors"
+                title={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="space-y-1.5">
@@ -138,7 +178,7 @@ export function CreateUserModal({
                 </option>
                 {availableRoles?.map((r) => (
                   <option key={r.id} value={r.id} className="bg-slate-900">
-                    {r.areas?.name} - {r.name}
+                    {r.name}
                   </option>
                 ))}
               </select>
