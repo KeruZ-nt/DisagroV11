@@ -147,13 +147,15 @@ export function TeamList({
                         >
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button
-                          onClick={() => handleDelete(member.id, member.name)}
-                          className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                          title="Eliminar usuario"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {!member.roles?.is_system_admin && (
+                          <button
+                            onClick={() => handleDelete(member.id, member.name)}
+                            className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                            title="Eliminar usuario"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   )}

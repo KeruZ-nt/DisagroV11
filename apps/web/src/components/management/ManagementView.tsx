@@ -38,7 +38,7 @@ export function ManagementView({
     setIsSavingArea(true);
     try {
       await createArea(areaName);
-      queryClient.invalidateQueries({ queryKey: ['rolesAndAreas'] });
+      queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
       setAreaName('');
     } catch (err) {
       alert((err as Error).message);
@@ -53,7 +53,7 @@ export function ManagementView({
     try {
       if (!roleAreaId) throw new Error('Debes seleccionar un área');
       await createRole(roleName, roleAreaId, isSystemAdmin);
-      queryClient.invalidateQueries({ queryKey: ['rolesAndAreas'] });
+      queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
       queryClient.invalidateQueries({ queryKey: ['roles'] });
       setRoleName('');
       setIsSystemAdmin(false);
@@ -165,7 +165,7 @@ export function ManagementView({
                           onClick={async () => {
                             await deleteArea(area.id);
                             queryClient.invalidateQueries({
-                              queryKey: ['rolesAndAreas'],
+                              queryKey: ['managementAreasAndRoles'],
                             });
                           }}
                           className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
@@ -295,7 +295,7 @@ export function ManagementView({
                           onClick={async () => {
                             await deleteRole(role.id);
                             queryClient.invalidateQueries({
-                              queryKey: ['rolesAndAreas'],
+                              queryKey: ['managementAreasAndRoles'],
                             });
                             queryClient.invalidateQueries({
                               queryKey: ['roles'],
