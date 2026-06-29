@@ -31,6 +31,8 @@ function SettingsPage() {
         .eq('id', sessionData?.id)
         .maybeSingle();
       if (error) throw error;
+      if (!data) return null;
+      
       return {
         ...data,
         role: data?.roles?.name || data?.role || 'Usuario',
