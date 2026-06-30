@@ -80,7 +80,7 @@ function InventoryPage() {
           <ExcelUploadDropzone onUploadComplete={refetch} />
         </div>
         <div className="lg:col-span-2 flex flex-col justify-center">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
               <p className="text-sm text-slate-400 font-medium mb-1">
                 Total Productos

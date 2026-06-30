@@ -303,7 +303,7 @@ export function CalendarModal({
               <input
                 required
                 type="text"
-                disabled={isAuto}
+                disabled={!!isAuto}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all disabled:opacity-50"
@@ -311,7 +311,7 @@ export function CalendarModal({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {!isAuto && (
                 <>
                   <div className="space-y-1.5">
