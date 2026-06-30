@@ -61,6 +61,7 @@ CREATE TABLE public.clients (
 -- 6. Tabla de PROYECTOS
 CREATE TABLE public.projects (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  code text UNIQUE,
   title text NOT NULL,
   description text,
   client_id uuid REFERENCES public.clients(id) ON DELETE CASCADE,
@@ -73,12 +74,14 @@ CREATE TABLE public.projects (
 -- 7. Tabla de PROFORMAS
 CREATE TABLE public.proformas (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  code text UNIQUE,
   project_id uuid REFERENCES public.projects(id) ON DELETE CASCADE,
   items jsonb DEFAULT '[]'::jsonb,
   total numeric(10,2) DEFAULT 0,
   expiration_date timestamp with time zone,
   issue_date timestamp with time zone DEFAULT timezone('utc'::text, now()),
   status text DEFAULT 'PENDING',
+  generated_file_url text,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -101,6 +104,8 @@ CREATE TABLE public.calendar_events (
   event_date timestamp with time zone NOT NULL,
   user_id uuid REFERENCES public.users(id) ON DELETE CASCADE,
   related_project_id uuid REFERENCES public.projects(id) ON DELETE CASCADE,
+  target_role_id uuid REFERENCES public.roles(id) ON DELETE CASCADE,
+  target_area_id uuid REFERENCES public.areas(id) ON DELETE CASCADE,
   created_by uuid REFERENCES public.users(id) ON DELETE SET NULL,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
