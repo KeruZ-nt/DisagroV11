@@ -2,6 +2,7 @@ import { Download, FileText, Plus, Save, Send, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Suspense, lazy } from 'react';
 import { ProformaDocument } from './ProformaDocument';
+import { CustomDatePicker } from '@/components/ui/CustomDatePicker';
 
 const LazyPDFViewer = lazy(() =>
   import('@react-pdf/renderer').then((mod) => ({ default: mod.PDFViewer }))
@@ -243,13 +244,19 @@ export function ProformaGenerator({
               <label className="block text-xs font-medium text-slate-400 mb-1.5">
                 Válido Hasta
               </label>
-              <input
-                type="date"
-                value={data.validUntil}
-                onChange={(e) =>
-                  setData({ ...data, validUntil: e.target.value })
-                }
-                className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-shadow [color-scheme:dark]"
+              <CustomDatePicker
+                selected={data.validUntil ? new Date(data.validUntil + 'T12:00:00') : null}
+                onChange={(date) => {
+                  if (date) {
+                    const yyyy = date.getFullYear();
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const dd = String(date.getDate()).padStart(2, '0');
+                    setData({ ...data, validUntil: `${yyyy}-${mm}-${dd}` });
+                  } else {
+                    setData({ ...data, validUntil: '' });
+                  }
+                }}
+                placeholderText="Seleccionar fecha"
               />
             </div>
           </div>
