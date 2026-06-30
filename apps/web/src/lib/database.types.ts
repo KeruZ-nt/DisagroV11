@@ -25,6 +25,13 @@ export interface Database {
           name?: string
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       roles: {
         Row: {
@@ -48,6 +55,13 @@ export interface Database {
           area_id?: string | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       users: {
         Row: {
@@ -74,6 +88,13 @@ export interface Database {
           avatar_url?: string | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       clients: {
         Row: {
@@ -112,6 +133,13 @@ export interface Database {
           assigned_salesperson_id?: string | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       projects: {
         Row: {
@@ -147,6 +175,13 @@ export interface Database {
           expected_revenue?: number | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       proformas: {
         Row: {
@@ -185,6 +220,13 @@ export interface Database {
           generated_file_url?: string | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       products: {
         Row: {
@@ -214,6 +256,13 @@ export interface Database {
           stock?: number | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       calendar_events: {
         Row: {
@@ -252,6 +301,13 @@ export interface Database {
           created_by?: string | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
       notifications: {
         Row: {
@@ -278,6 +334,13 @@ export interface Database {
           read?: boolean | null
           created_at?: string
         }
+        Relationships: {
+          foreignKeyName: string
+          columns: string[]
+          isOneToOne?: boolean
+          referencedRelation: string
+          referencedColumns: string[]
+        }[]
       }
     }
   }

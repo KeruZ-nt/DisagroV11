@@ -18,14 +18,18 @@ import {
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+
+import type { Client, Project, User } from '@/types';
 
 export function ClientHistoryModal({
   client,
   salespeople = [],
   onClose,
 }: {
-  client: { id: string; name?: string; assigned_salesperson_id?: string };
-  salespeople?: any[];
+  client: Partial<Client>;
+  salespeople?: User[];
   onClose: () => void;
 }) {
   const [history, setHistory] = useState<Record<string, unknown>[]>([]);
@@ -35,8 +39,6 @@ export function ClientHistoryModal({
   const [newNotes, setNewNotes] = useState('');
   const [newSalesperson, setNewSalesperson] = useState(client.assigned_salesperson_id || '');
   const [historySearch, setHistorySearch] = useState('');
-  const [isSavingDraft, setIsSavingDraft] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -69,37 +71,37 @@ export function ClientHistoryModal({
     loadHistory();
   }, [client.id]);
 
-  const handleCreateNewDraft = async () => {
-    setError(null);
-    if (!newTitle) {
-      setError('Debes seleccionar un tipo de trámite.');
-      return;
-    }
-    if (!newNotes.trim()) {
-      setError('Debes ingresar la descripción o problemática.');
-      return;
-    }
-    setIsSavingDraft(true);
-    try {
+  const draftMutation = useMutation({
+    mutationFn: async () => {
+      if (!newTitle) {
+        throw new Error('Debes seleccionar un tipo de trámite.');
+      }
+      if (!newNotes.trim()) {
+        throw new Error('Debes ingresar la descripción o problemática.');
+      }
       await createNewDraftFromHistory(
-        client.id,
+        client.id!,
         newTitle,
         newNotes,
         newSalesperson || client.assigned_salesperson_id
       );
+    },
+    onSuccess: async () => {
       setNewTitle('');
       setNewNotes('');
       setIsCreatingNew(false);
       await queryClient.invalidateQueries({ queryKey: ['clients'] });
       await queryClient.invalidateQueries({ queryKey: ['clientDetails'] });
       await loadHistory();
-    } catch (err: unknown) {
-      const errorMsg =
-        err instanceof Error ? err.message : 'Error al generar borrador';
-      setError(errorMsg);
-    } finally {
-      setIsSavingDraft(false);
-    }
+      toast.success('Borrador generado exitosamente');
+    },
+    onError: (err: any) => {
+      toast.error(err.message || 'Error al generar borrador');
+    },
+  });
+
+  const handleCreateNewDraft = () => {
+    draftMutation.mutate();
   };
 
   const toggleExpand = (id: string) => {
@@ -131,7 +133,7 @@ export function ClientHistoryModal({
   };
 
   const allowedRole = getAllowedRole();
-  const filteredSalespeople = salespeople.filter((u: any) => {
+  const filteredSalespeople = salespeople.filter((u: User) => {
     if (!allowedRole) return true; // si no hay regla, mostrar todos o ninguno (aquí muestro todos)
     return u.roles?.name?.toLowerCase().includes(allowedRole);
   });
@@ -234,7 +236,7 @@ export function ClientHistoryModal({
                       onChange={setNewSalesperson}
                       options={[
                         { value: '', label: '-- Sin asignar --' },
-                        ...filteredSalespeople.map((u: any) => ({
+                        ...filteredSalespeople.map((u: User) => ({
                           value: u.id,
                           label: `${u.name} (${u.roles?.name || 'Sin rol'})`,
                         })),
@@ -248,14 +250,14 @@ export function ClientHistoryModal({
                   </div>
                 )}
               </div>
-              {error && <p className="text-red-400 text-xs mb-3">{error}</p>}
+              {/* Error is now handled by toast */}
               <div className="flex justify-end gap-2">
                 <button
                   onClick={handleCreateNewDraft}
-                  disabled={isSavingDraft}
+                  disabled={draftMutation.isPending}
                   className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                 >
-                  {isSavingDraft ? (
+                  {draftMutation.isPending ? (
                     'Generando...'
                   ) : (
                     <>
@@ -294,7 +296,7 @@ export function ClientHistoryModal({
               {filteredHistory.length === 0 ? (
                 <p className="text-center text-sm text-slate-500 py-4">No se encontraron trámites con esa búsqueda.</p>
               ) : 
-                filteredHistory.map((project: any) => {
+                filteredHistory.map((project: Project) => {
                   const isExpanded = expandedId === project.id;
                   return (
                   <div

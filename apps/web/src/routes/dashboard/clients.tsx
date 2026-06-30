@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Search, User } from 'lucide-react';
+import type { Client, User as UserType } from '@/types';
 
 export const Route = createFileRoute('/dashboard/clients')({
   component: ClientsPage,
@@ -35,9 +36,9 @@ function ClientsPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from('users')
-        .select('id, name, roles!inner(name, is_system_admin)')
+        .select('id, name, email, created_at, roles!inner(name, is_system_admin)')
         .eq('roles.is_system_admin', false);
-      return (data as any) || [];
+      return (data as unknown as UserType[]) || [];
     },
   });
 
@@ -56,6 +57,7 @@ function ClientsPage() {
           company,
           notes,
           location,
+          status,
           created_at,
           assigned_salesperson_id,
           users ( name )
@@ -66,7 +68,7 @@ function ClientsPage() {
         query = query.eq('assigned_salesperson_id', sessionData.id);
       }
       const { data } = await query;
-      return (data as any) || [];
+      return (data as unknown as Client[]) || [];
     },
   });
 
@@ -123,7 +125,7 @@ function ClientsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {clients.map((client: any) => (
+              {clients.map((client: Client) => (
                 <ClientRow key={client.id} client={client} isAdmin={isAdmin} salespeople={salespeople}>
                   <ClientModal
                     isAdmin={isAdmin}
@@ -135,7 +137,6 @@ function ClientsPage() {
                       email: client.email || '',
                       phone: client.phone || '',
                       company: client.company || '',
-                      notes: client.notes || '',
                       location: client.location || '',
                       assigned_salesperson_id:
                         client.assigned_salesperson_id || '',

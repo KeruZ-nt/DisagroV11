@@ -15,10 +15,14 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
+
+import type { User as UserType } from '@/types';
 
 type ClientModalProps = {
   isAdmin: boolean;
-  salespeople?: { id: string; name: string }[];
+  salespeople?: UserType[];
   mode?: 'create' | 'edit';
   initialData?: {
     id?: string;
@@ -39,8 +43,6 @@ export function ClientModal({
 }: ClientModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -58,25 +60,27 @@ export function ClientModal({
     setMounted(true);
   }, []);
 
-  const handleSave = async () => {
-    setError(null);
-    if (!data.name.trim()) {
-      setError('El nombre del cliente es obligatorio.');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      if (!data.name.trim()) {
+        throw new Error('El nombre del cliente es obligatorio.');
+      }
       if (mode === 'edit' && initialData?.id) {
         await updateClientRecord(initialData.id, data);
       } else {
         await createClientRecord(data);
       }
+    },
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['clients'] });
       await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       setIsOpen(false);
+      toast.success(
+        mode === 'create'
+          ? 'Cliente registrado exitosamente'
+          : 'Cliente actualizado exitosamente'
+      );
 
-      // Reset form on success if creating
       if (mode === 'create') {
         setData({
           name: '',
@@ -87,11 +91,14 @@ export function ClientModal({
           assigned_salesperson_id: '',
         });
       }
-    } catch (err: any) {
-      setError(err.message || 'Ocurrió un error al guardar.');
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    onError: (err: any) => {
+      toast.error(err.message || 'Ocurrió un error al guardar.');
+    },
+  });
+
+  const handleSave = () => {
+    saveMutation.mutate();
   };
 
   // Solo el Admin puede ver estos botones para abrir el modal
@@ -309,11 +316,7 @@ export function ClientModal({
                 </div>
 
 
-                {error && (
-                  <div className="px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-xs">
-                    {error}
-                  </div>
-                )}
+                {/* Error is now handled by toast */}
               </div>
 
               <div className="p-5 border-t border-white/5 bg-slate-950/30 flex justify-end gap-3 rounded-b-2xl">
@@ -325,10 +328,10 @@ export function ClientModal({
                 </button>
                 <button
                   onClick={handleSave}
-                  disabled={isLoading}
+                  disabled={saveMutation.isPending}
                   className="flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
                 >
-                  {isLoading ? (
+                  {saveMutation.isPending ? (
                     'Guardando...'
                   ) : (
                     <>

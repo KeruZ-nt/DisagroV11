@@ -2,12 +2,14 @@ import { Building2, Mail, Phone, User } from 'lucide-react';
 import { useState } from 'react';
 import { ClientHistoryModal } from './ClientHistoryModal';
 
+import type { Client, User as UserType } from '@/types';
+
 export function ClientRow({
   client,
   isAdmin,
   salespeople,
   children,
-}: { client: any; isAdmin: boolean; salespeople: any[]; children: React.ReactNode }) {
+}: { client: Client; isAdmin: boolean; salespeople: UserType[]; children: React.ReactNode }) {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   return (
