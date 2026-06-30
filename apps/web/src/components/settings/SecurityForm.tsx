@@ -86,29 +86,31 @@ export function SecurityForm({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6">
+      <div className="bg-slate-900/50 border border-white/10 rounded-2xl p-6 flex flex-col">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Mail className="w-5 h-5 text-emerald-400" />
           Correo Electrónico
         </h3>
         
         {!isEditingEmail ? (
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col flex-1">
             <div className="space-y-1">
               <label className="text-sm font-medium text-slate-400">Correo Actual</label>
               <div className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2.5 text-slate-300">
                 {currentEmail}
               </div>
             </div>
-            <button
-              onClick={() => setIsEditingEmail(true)}
-              className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-medium transition-all"
-            >
-              Cambiar Correo
-            </button>
+            <div className="mt-auto pt-4">
+              <button
+                onClick={() => setIsEditingEmail(true)}
+                className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-medium transition-all"
+              >
+                Cambiar Correo
+              </button>
+            </div>
           </div>
         ) : (
-          <form onSubmit={handleUpdateEmail} className="space-y-4">
+          <form onSubmit={handleUpdateEmail} className="space-y-4 flex flex-col flex-1">
             <div className="space-y-1">
               <label className="text-sm font-medium text-slate-400">Nuevo Correo</label>
               <input
@@ -131,7 +133,7 @@ export function SecurityForm({
                 placeholder="••••••••"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="mt-auto pt-4 flex gap-3">
               <button
                 type="button"
                 onClick={() => {
