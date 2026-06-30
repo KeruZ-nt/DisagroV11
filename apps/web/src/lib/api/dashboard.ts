@@ -117,7 +117,7 @@ export function useDashboardData(userId: string) {
         .limit(10);
 
       if (!isAdmin) {
-        eventsQuery = eventsQuery.eq('created_by', userId);
+        eventsQuery = eventsQuery.eq('user_id', userId);
       }
 
       const { data: upcomingEvents } = await eventsQuery;
