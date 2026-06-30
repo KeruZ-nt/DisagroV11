@@ -56,7 +56,7 @@ function DashboardIndex() {
   } = data!;
 
   return (
-    <div className="animate-in fade-in duration-500 h-full flex flex-col min-h-0 pb-2">
+    <div className="animate-in fade-in duration-500 h-full flex flex-col min-h-0 pb-2 overflow-y-auto lg:overflow-hidden custom-scrollbar">
       {/* HEADER ROW */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>
@@ -79,7 +79,7 @@ function DashboardIndex() {
       <div className="flex-1 flex gap-6 min-h-0 flex-col lg:flex-row">
         {/* COLUMNA IZQUIERDA (Estadísticas y Gráficos) */}
         <div className="flex-1 flex flex-col gap-6 min-h-0">
-          <div className="flex-shrink-0 h-32">
+          <div className="flex-shrink-0 lg:h-32">
             <StatsCards
               totalSales={totalSales}
               clientsCount={clientsCount}
@@ -88,17 +88,17 @@ function DashboardIndex() {
           </div>
 
           <div className="flex-1 flex flex-col gap-6 min-h-0">
-            <div className="flex-1 min-h-0">
+            <div className="min-h-[300px] lg:flex-1 lg:min-h-0">
               <BalanceChart data={monthlyData} />
             </div>
-            <div className="flex-1 min-h-0">
+            <div className="min-h-[300px] lg:flex-1 lg:min-h-0">
               <GrowthChart data={annualData} />
             </div>
           </div>
         </div>
 
         {/* COLUMNA DERECHA (Agenda en Fila) */}
-        <div className="w-full lg:w-80 xl:w-96 flex-shrink-0 flex flex-col min-h-0">
+        <div className="w-full lg:w-80 xl:w-96 flex-shrink-0 flex flex-col min-h-[400px] lg:min-h-0">
           <div className="h-full p-4 2xl:p-6 border border-white/5 bg-white/5 rounded-2xl shadow-xl backdrop-blur-sm flex flex-col min-h-0">
             <h4 className="text-base font-semibold text-slate-200 mb-4 flex-shrink-0">
               Agenda en Fila

@@ -16,7 +16,7 @@ export function StatsCards({
   pendingProformas,
 }: { totalSales: number; clientsCount: number; pendingProformas: number }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 lg:h-full">
       <div className="p-4 2xl:p-6 border border-white/5 bg-white/5 rounded-2xl shadow-xl backdrop-blur-sm relative overflow-hidden group flex flex-col justify-center">
         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-colors" />
         <p className="text-sm font-medium text-slate-400 mb-1">
