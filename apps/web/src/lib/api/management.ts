@@ -74,6 +74,7 @@ export async function deleteRole(id: string) {
 
 export async function deleteUser(userId: string) {
   const { error } = await adminAuthClient.auth.admin.deleteUser(userId);
-  if (error) throw new Error(`No se pudo eliminar el usuario: ${error.message}`);
+  if (error)
+    throw new Error(`No se pudo eliminar el usuario: ${error.message}`);
   return { success: true };
 }

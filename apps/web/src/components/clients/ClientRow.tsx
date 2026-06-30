@@ -9,7 +9,12 @@ export function ClientRow({
   isAdmin,
   salespeople,
   children,
-}: { client: Client; isAdmin: boolean; salespeople: UserType[]; children: React.ReactNode }) {
+}: {
+  client: Client;
+  isAdmin: boolean;
+  salespeople: UserType[];
+  children: React.ReactNode;
+}) {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   return (

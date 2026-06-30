@@ -178,7 +178,10 @@ export function ProfileForm({
           <div className="pt-4 flex justify-end">
             <button
               onClick={handleSave}
-              disabled={isSaving || (name === profile.name && phone === (profile.phone || ''))}
+              disabled={
+                isSaving ||
+                (name === profile.name && phone === (profile.phone || ''))
+              }
               className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20"
             >
               {isSaving ? (

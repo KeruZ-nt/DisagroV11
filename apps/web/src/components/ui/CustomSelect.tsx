@@ -35,9 +35,9 @@ export function CustomSelect({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
-  const filteredOptions = searchable 
-    ? options.filter(opt => 
-        typeof opt.label === 'string' 
+  const filteredOptions = searchable
+    ? options.filter((opt) =>
+        typeof opt.label === 'string'
           ? opt.label.toLowerCase().includes(searchTerm.toLowerCase())
           : opt.value.toLowerCase().includes(searchTerm.toLowerCase())
       )
@@ -48,7 +48,8 @@ export function CustomSelect({
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as Node) &&
-        (!dropdownRef.current || !dropdownRef.current.contains(event.target as Node))
+        (!dropdownRef.current ||
+          !dropdownRef.current.contains(event.target as Node))
       ) {
         setIsOpen(false);
       }

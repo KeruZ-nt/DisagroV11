@@ -45,7 +45,9 @@ export function SecurityForm({
         .eq('id', userId);
       if (dbError) throw dbError;
 
-      toast.success('Correo electrónico actualizado correctamente. Revisa tu bandeja de entrada para verificarlo.');
+      toast.success(
+        'Correo electrónico actualizado correctamente. Revisa tu bandeja de entrada para verificarlo.'
+      );
       setNewEmail('');
       setEmailPassword('');
       setIsEditingEmail(false);
@@ -91,11 +93,13 @@ export function SecurityForm({
           <Mail className="w-5 h-5 text-emerald-400" />
           Correo Electrónico
         </h3>
-        
+
         {!isEditingEmail ? (
           <div className="space-y-4 flex flex-col flex-1">
             <div className="space-y-1">
-              <label className="text-sm font-medium text-slate-400">Correo Actual</label>
+              <label className="text-sm font-medium text-slate-400">
+                Correo Actual
+              </label>
               <div className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2.5 text-slate-300">
                 {currentEmail}
               </div>
@@ -110,9 +114,14 @@ export function SecurityForm({
             </div>
           </div>
         ) : (
-          <form onSubmit={handleUpdateEmail} className="space-y-4 flex flex-col flex-1">
+          <form
+            onSubmit={handleUpdateEmail}
+            className="space-y-4 flex flex-col flex-1"
+          >
             <div className="space-y-1">
-              <label className="text-sm font-medium text-slate-400">Nuevo Correo</label>
+              <label className="text-sm font-medium text-slate-400">
+                Nuevo Correo
+              </label>
               <input
                 type="email"
                 required
@@ -123,7 +132,9 @@ export function SecurityForm({
               />
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-medium text-slate-400">Contraseña Actual (Requerido)</label>
+              <label className="text-sm font-medium text-slate-400">
+                Contraseña Actual (Requerido)
+              </label>
               <input
                 type="password"
                 required
@@ -150,7 +161,9 @@ export function SecurityForm({
                 disabled={isUpdatingEmail || !newEmail || !emailPassword}
                 className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {isUpdatingEmail && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isUpdatingEmail && (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                )}
                 Actualizar
               </button>
             </div>
@@ -164,9 +177,14 @@ export function SecurityForm({
           <Lock className="w-5 h-5 text-emerald-400" />
           Cambiar Contraseña
         </h3>
-        <form onSubmit={handleUpdatePassword} className="space-y-4 flex flex-col flex-1">
+        <form
+          onSubmit={handleUpdatePassword}
+          className="space-y-4 flex flex-col flex-1"
+        >
           <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-400">Nueva Contraseña</label>
+            <label className="text-sm font-medium text-slate-400">
+              Nueva Contraseña
+            </label>
             <input
               type="password"
               required
@@ -179,7 +197,9 @@ export function SecurityForm({
           </div>
           {newPassword.length > 0 && (
             <div className="space-y-1 animate-in fade-in slide-in-from-top-2 duration-300">
-              <label className="text-sm font-medium text-slate-400">Repetir Nueva Contraseña</label>
+              <label className="text-sm font-medium text-slate-400">
+                Repetir Nueva Contraseña
+              </label>
               <input
                 type="password"
                 required
@@ -196,7 +216,9 @@ export function SecurityForm({
               disabled={isUpdatingPassword || !newPassword || !confirmPassword}
               className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {isUpdatingPassword && <Loader2 className="w-4 h-4 animate-spin" />}
+              {isUpdatingPassword && (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              )}
               Actualizar Contraseña
             </button>
           </div>

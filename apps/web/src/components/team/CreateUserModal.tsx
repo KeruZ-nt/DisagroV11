@@ -32,12 +32,13 @@ export function CreateUserModal({
       if (!roleId) throw new Error('Debes seleccionar un rol para el usuario.');
 
       // 1. Crear usuario con adminAuthClient (no cierra la sesión actual)
-      const { data: authData, error: authError } = await adminAuthClient.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: { name }
-      });
+      const { data: authData, error: authError } =
+        await adminAuthClient.auth.admin.createUser({
+          email,
+          password,
+          email_confirm: true,
+          user_metadata: { name },
+        });
 
       if (authError) throw new Error(authError.message);
       if (!authData.user) throw new Error('Error desconocido al crear usuario');
@@ -47,7 +48,7 @@ export function CreateUserModal({
         id: authData.user.id,
         name,
         email,
-        role_id: roleId
+        role_id: roleId,
       });
 
       if (dbError) {
@@ -151,7 +152,7 @@ export function CreateUserModal({
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-white transition-colors"
-                title={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+                title={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
               >
                 {showPassword ? (
                   <EyeOff className="w-4 h-4" />

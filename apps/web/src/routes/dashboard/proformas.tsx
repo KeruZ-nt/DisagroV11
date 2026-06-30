@@ -15,7 +15,10 @@ export const Route = createFileRoute('/dashboard/proformas')({
 });
 
 function ProformasPage() {
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string, projectId: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    projectId: string;
+  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { data: sessionData } = useQuery({
@@ -145,8 +148,12 @@ function ProformasPage() {
             isAdmin={isAdmin}
             salespeople={salespeople}
           />
-          <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-slate-300 text-sm font-medium transition-colors">
-            <Filter className="w-4 h-4" /> Filtros
+          <button
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-slate-300 text-sm font-medium transition-colors"
+            title="Filtros"
+          >
+            <Filter className="w-4 h-4" />{' '}
+            <span className="hidden sm:inline">Filtros</span>
           </button>
         </div>
       </div>
@@ -230,7 +237,12 @@ function ProformasPage() {
                         projectId={prof.projectId}
                       />
                       <button
-                        onClick={() => setDeleteTarget({ id: prof.id, projectId: prof.projectId })}
+                        onClick={() =>
+                          setDeleteTarget({
+                            id: prof.id,
+                            projectId: prof.projectId,
+                          })
+                        }
                         title="Eliminar"
                         className="text-slate-400 hover:text-red-400 transition-colors p-1.5 rounded hover:bg-red-500/10"
                       >

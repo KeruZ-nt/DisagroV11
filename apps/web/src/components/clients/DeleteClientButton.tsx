@@ -21,7 +21,9 @@ export function DeleteClientButton({
       setIsOpen(false);
     } catch (error) {
       console.error('Error al eliminar:', error);
-      toast.error(`No se pudo eliminar el cliente. ${(error as Error).message}`);
+      toast.error(
+        `No se pudo eliminar el cliente. ${(error as Error).message}`
+      );
     } finally {
       setIsDeleting(false);
     }

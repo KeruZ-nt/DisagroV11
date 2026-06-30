@@ -36,7 +36,9 @@ function ClientsPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from('users')
-        .select('id, name, email, created_at, roles!inner(name, is_system_admin, areas (name))')
+        .select(
+          'id, name, email, created_at, roles!inner(name, is_system_admin, areas (name))'
+        )
         .eq('roles.is_system_admin', false);
       return (data as unknown as UserType[]) || [];
     },
@@ -126,7 +128,12 @@ function ClientsPage() {
             </thead>
             <tbody className="divide-y divide-white/5">
               {clients.map((client: Client) => (
-                <ClientRow key={client.id} client={client} isAdmin={isAdmin} salespeople={salespeople}>
+                <ClientRow
+                  key={client.id}
+                  client={client}
+                  isAdmin={isAdmin}
+                  salespeople={salespeople}
+                >
                   <ClientModal
                     isAdmin={isAdmin}
                     salespeople={salespeople}

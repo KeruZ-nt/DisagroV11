@@ -37,7 +37,9 @@ export function ClientHistoryModal({
   const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newNotes, setNewNotes] = useState('');
-  const [newSalesperson, setNewSalesperson] = useState(client.assigned_salesperson_id || '');
+  const [newSalesperson, setNewSalesperson] = useState(
+    client.assigned_salesperson_id || ''
+  );
   const [historySearch, setHistorySearch] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -135,8 +137,12 @@ export function ClientHistoryModal({
   const allowedRoleInfo = getAllowedRole();
   const filteredSalespeople = salespeople.filter((u: User) => {
     if (!allowedRoleInfo) return true; // si no hay regla, mostrar todos
-    const matchRole = u.roles?.name?.toLowerCase().includes(allowedRoleInfo.role);
-    const matchArea = u.roles?.areas?.name?.toLowerCase().includes(allowedRoleInfo.area);
+    const matchRole = u.roles?.name
+      ?.toLowerCase()
+      .includes(allowedRoleInfo.role);
+    const matchArea = u.roles?.areas?.name
+      ?.toLowerCase()
+      .includes(allowedRoleInfo.area);
     return matchRole && matchArea;
   });
 
@@ -190,7 +196,7 @@ export function ClientHistoryModal({
               <h4 className="text-emerald-400 font-semibold mb-4 text-sm flex items-center gap-2">
                 <PlusCircle className="w-4 h-4" /> Registrar Nuevo Trámite
               </h4>
-              
+
               <div className="space-y-4 mb-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-400 mb-1.5">
@@ -200,8 +206,14 @@ export function ClientHistoryModal({
                     value={newTitle}
                     onChange={setNewTitle}
                     options={[
-                      { value: 'Cotización de productos', label: 'Cotización de productos' },
-                      { value: 'Instalación de sistema', label: 'Instalación de sistema' },
+                      {
+                        value: 'Cotización de productos',
+                        label: 'Cotización de productos',
+                      },
+                      {
+                        value: 'Instalación de sistema',
+                        label: 'Instalación de sistema',
+                      },
                       { value: 'Mantenimiento', label: 'Mantenimiento' },
                       { value: 'Soporte Técnico', label: 'Soporte Técnico' },
                       { value: 'Asesoría Técnica', label: 'Asesoría Técnica' },
@@ -223,14 +235,15 @@ export function ClientHistoryModal({
                     placeholder="¿Qué se le va a ofrecer? ¿Qué problema tiene que vamos a resolver?"
                   />
                 </div>
-                
+
                 {salespeople.length > 0 && (
                   <div>
                     <label className="block text-xs font-medium text-slate-400 mb-1.5 flex items-center justify-between">
                       <span>Asignar Encargado</span>
                       {allowedRoleInfo && (
                         <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">
-                          Filtro: {allowedRoleInfo.role} ({allowedRoleInfo.area})
+                          Filtro: {allowedRoleInfo.role} ({allowedRoleInfo.area}
+                          )
                         </span>
                       )}
                     </label>
@@ -244,11 +257,17 @@ export function ClientHistoryModal({
                           label: `${u.name} (${u.roles?.name || 'Sin rol'} - ${u.roles?.areas?.name || 'Sin área'})`,
                         })),
                       ]}
-                      placeholder={!newTitle ? "Primero seleccione un Asunto" : "Seleccionar..."}
+                      placeholder={
+                        !newTitle
+                          ? 'Primero seleccione un Asunto'
+                          : 'Seleccionar...'
+                      }
                       disabled={!newTitle}
                     />
                     {!newTitle && (
-                      <p className="mt-1 text-[10px] text-amber-500/80">Bloqueado hasta elegir tipo de trámite.</p>
+                      <p className="mt-1 text-[10px] text-amber-500/80">
+                        Bloqueado hasta elegir tipo de trámite.
+                      </p>
                     )}
                   </div>
                 )}
@@ -295,104 +314,107 @@ export function ClientHistoryModal({
                   className="w-full bg-slate-950/50 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
-              
+
               {filteredHistory.length === 0 ? (
-                <p className="text-center text-sm text-slate-500 py-4">No se encontraron trámites con esa búsqueda.</p>
-              ) : 
+                <p className="text-center text-sm text-slate-500 py-4">
+                  No se encontraron trámites con esa búsqueda.
+                </p>
+              ) : (
                 filteredHistory.map((project: Project) => {
                   const isExpanded = expandedId === project.id;
                   return (
-                  <div
-                    key={project.id}
-                    className="bg-slate-900/50 border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors"
-                  >
                     <div
-                      className="flex justify-between items-start p-4 cursor-pointer select-none"
-                      onClick={() => toggleExpand(project.id)}
+                      key={project.id}
+                      className="bg-slate-900/50 border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors"
                     >
-                      <div className="flex-1">
-                        <h5 className="font-medium text-slate-200 flex items-center gap-2">
-                          {project.code && (
-                            <span className="text-emerald-400 font-mono text-xs bg-emerald-500/10 px-1.5 py-0.5 rounded">
-                              {project.code}
-                            </span>
+                      <div
+                        className="flex justify-between items-start p-4 cursor-pointer select-none"
+                        onClick={() => toggleExpand(project.id)}
+                      >
+                        <div className="flex-1">
+                          <h5 className="font-medium text-slate-200 flex items-center gap-2">
+                            {project.code && (
+                              <span className="text-emerald-400 font-mono text-xs bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                                {project.code}
+                              </span>
+                            )}
+                            {project.title}
+                          </h5>
+                          <span className="text-[10px] uppercase tracking-wider text-slate-500 flex items-center gap-1 mt-1">
+                            <Calendar className="w-3 h-3" />{' '}
+                            {new Date(project.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              project.status === 'CONFIRMED'
+                                ? 'bg-emerald-500/10 text-emerald-400'
+                                : project.status === 'CANCELLED'
+                                  ? 'bg-red-500/10 text-red-400'
+                                  : 'bg-amber-500/10 text-amber-400'
+                            }`}
+                          >
+                            {project.status}
+                          </span>
+                          {isExpanded ? (
+                            <ChevronUp className="w-4 h-4 text-slate-500" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4 text-slate-500" />
                           )}
-                          {project.title}
-                        </h5>
-                        <span className="text-[10px] uppercase tracking-wider text-slate-500 flex items-center gap-1 mt-1">
-                          <Calendar className="w-3 h-3" />{' '}
-                          {new Date(project.created_at).toLocaleDateString()}
-                        </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            project.status === 'CONFIRMED'
-                              ? 'bg-emerald-500/10 text-emerald-400'
-                              : project.status === 'CANCELLED'
-                                ? 'bg-red-500/10 text-red-400'
-                                : 'bg-amber-500/10 text-amber-400'
-                          }`}
-                        >
-                          {project.status}
-                        </span>
-                        {isExpanded ? (
-                          <ChevronUp className="w-4 h-4 text-slate-500" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4 text-slate-500" />
-                        )}
-                      </div>
-                    </div>
 
-                    {isExpanded && (
-                      <div className="p-4 pt-0 border-t border-white/5 bg-slate-950/30 animate-in slide-in-from-top-1">
-                        {project.proformas && project.proformas.length > 0 ? (
-                          <div className="space-y-2 mt-3">
-                            {project.proformas.map((prof: any) => (
-                              <div
-                                key={prof.id}
-                                className="flex items-center justify-between bg-black/40 p-3 rounded-lg border border-white/5"
-                              >
-                                <div className="flex items-center gap-3">
-                                  <FileText className="w-4 h-4 text-emerald-500" />
-                                  <div>
-                                    {prof.code && (
-                                      <p className="text-xs text-slate-500 font-mono mb-0.5">
-                                        {prof.code}
-                                      </p>
-                                    )}
-                                    <span className="text-sm font-medium text-emerald-400">
-                                      ${Number(prof.total).toLocaleString()}
-                                    </span>
+                      {isExpanded && (
+                        <div className="p-4 pt-0 border-t border-white/5 bg-slate-950/30 animate-in slide-in-from-top-1">
+                          {project.proformas && project.proformas.length > 0 ? (
+                            <div className="space-y-2 mt-3">
+                              {project.proformas.map((prof: any) => (
+                                <div
+                                  key={prof.id}
+                                  className="flex items-center justify-between bg-black/40 p-3 rounded-lg border border-white/5"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <FileText className="w-4 h-4 text-emerald-500" />
+                                    <div>
+                                      {prof.code && (
+                                        <p className="text-xs text-slate-500 font-mono mb-0.5">
+                                          {prof.code}
+                                        </p>
+                                      )}
+                                      <span className="text-sm font-medium text-emerald-400">
+                                        ${Number(prof.total).toLocaleString()}
+                                      </span>
+                                    </div>
                                   </div>
+                                  {prof.generated_file_url ? (
+                                    <a
+                                      href={prof.generated_file_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-xs bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg transition-colors"
+                                    >
+                                      Ver PDF
+                                    </a>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-1 rounded">
+                                      Sin PDF
+                                    </span>
+                                  )}
                                 </div>
-                                {prof.generated_file_url ? (
-                                  <a
-                                    href={prof.generated_file_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-xs bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg transition-colors"
-                                  >
-                                    Ver PDF
-                                  </a>
-                                ) : (
-                                  <span className="text-[10px] text-slate-500 bg-slate-800 px-2 py-1 rounded">
-                                    Sin PDF
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="text-xs text-slate-500 italic mt-3">
-                            No se generó proforma (Solo proyecto base)
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-slate-500 italic mt-3">
+                              No se generó proforma (Solo proyecto base)
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
             </div>
           )}
         </div>

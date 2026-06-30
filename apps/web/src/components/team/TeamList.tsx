@@ -26,7 +26,10 @@ export function TeamList({
 }: { team: TeamMember[]; isAdmin: boolean; availableRoles: RoleData[] }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string, name: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
 
@@ -74,9 +77,11 @@ export function TeamList({
         {isAdmin && (
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20"
+            className="flex items-center gap-2 px-3 sm:px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20"
+            title="Añadir Miembro"
           >
-            <UserPlus className="w-5 h-5" /> Añadir Miembro
+            <UserPlus className="w-5 h-5" />{' '}
+            <span className="hidden sm:inline">Añadir Miembro</span>
           </button>
         )}
       </div>

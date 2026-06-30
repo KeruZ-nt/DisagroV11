@@ -41,7 +41,10 @@ export function ManagementView({
   const [editingRole, setEditingRole] = useState<RoleData | null>(null);
 
   // Delete Modal State
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string, type: 'area' | 'role' } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    type: 'area' | 'role';
+  } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
@@ -49,7 +52,7 @@ export function ManagementView({
       const target = event.target as HTMLElement;
       if (target.closest('.form-panel')) return;
       if (target.closest('.edit-btn')) return;
-      
+
       if (editingArea) resetAreaForm();
       if (editingRole) resetRoleForm();
     }
@@ -88,13 +91,13 @@ export function ManagementView({
     setIsSavingRole(true);
     try {
       if (!roleAreaId) throw new Error('Debes seleccionar un área');
-      
+
       if (editingRole) {
         await updateRole(editingRole.id, roleName, roleAreaId, isSystemAdmin);
       } else {
         await createRole(roleName, roleAreaId, isSystemAdmin);
       }
-      
+
       queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
       queryClient.invalidateQueries({ queryKey: ['roles'] });
       resetRoleForm();
@@ -118,10 +121,14 @@ export function ManagementView({
     try {
       if (deleteTarget.type === 'area') {
         await deleteArea(deleteTarget.id);
-        queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
+        queryClient.invalidateQueries({
+          queryKey: ['managementAreasAndRoles'],
+        });
       } else {
         await deleteRole(deleteTarget.id);
-        queryClient.invalidateQueries({ queryKey: ['managementAreasAndRoles'] });
+        queryClient.invalidateQueries({
+          queryKey: ['managementAreasAndRoles'],
+        });
         queryClient.invalidateQueries({ queryKey: ['roles'] });
       }
       setDeleteTarget(null);
@@ -137,7 +144,11 @@ export function ManagementView({
       <ConfirmModal
         isOpen={!!deleteTarget}
         title={deleteTarget?.type === 'area' ? 'Eliminar Área' : 'Eliminar Rol'}
-        message={deleteTarget?.type === 'area' ? '¿Estás seguro de que deseas eliminar esta área? Se eliminarán también todos los roles asociados a ella.' : '¿Estás seguro de que deseas eliminar este rol?'}
+        message={
+          deleteTarget?.type === 'area'
+            ? '¿Estás seguro de que deseas eliminar esta área? Se eliminarán también todos los roles asociados a ella.'
+            : '¿Estás seguro de que deseas eliminar este rol?'
+        }
         isConfirming={isDeleting}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTarget(null)}
@@ -213,7 +224,11 @@ export function ManagementView({
                   disabled={isSavingArea}
                   className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
                 >
-                  {isSavingArea ? 'Guardando...' : (editingArea ? 'Actualizar Área' : 'Crear Área')}
+                  {isSavingArea
+                    ? 'Guardando...'
+                    : editingArea
+                      ? 'Actualizar Área'
+                      : 'Crear Área'}
                 </button>
               </form>
             </div>
@@ -258,7 +273,9 @@ export function ManagementView({
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => setDeleteTarget({ id: area.id, type: 'area' })}
+                            onClick={() =>
+                              setDeleteTarget({ id: area.id, type: 'area' })
+                            }
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -339,7 +356,11 @@ export function ManagementView({
                   disabled={isSavingRole}
                   className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium transition-all"
                 >
-                  {isSavingRole ? 'Guardando...' : (editingRole ? 'Actualizar Rol' : 'Crear Rol')}
+                  {isSavingRole
+                    ? 'Guardando...'
+                    : editingRole
+                      ? 'Actualizar Rol'
+                      : 'Crear Rol'}
                 </button>
               </form>
             </div>
@@ -406,7 +427,9 @@ export function ManagementView({
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => setDeleteTarget({ id: role.id, type: 'role' })}
+                            onClick={() =>
+                              setDeleteTarget({ id: role.id, type: 'role' })
+                            }
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />

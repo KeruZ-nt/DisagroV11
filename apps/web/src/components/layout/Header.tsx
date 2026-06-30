@@ -178,42 +178,43 @@ export function Header({
       </div>
 
       {/* Mobile Navigation Overlay */}
-      {isMobileNavOpen && createPortal(
-        <div className="fixed inset-0 z-[100] md:hidden">
-          <div
-            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
-            onClick={() => setIsMobileNavOpen(false)}
-          />
-          <div className="absolute left-0 top-0 bottom-0 w-64 bg-slate-900 border-r border-white/10 shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
-            <div className="h-16 flex items-center justify-between px-4 border-b border-white/5">
-              <span className="font-bold text-emerald-400 text-lg">Menu</span>
-              <button
-                onClick={() => setIsMobileNavOpen(false)}
-                className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+      {isMobileNavOpen &&
+        createPortal(
+          <div className="fixed inset-0 z-[100] md:hidden">
+            <div
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+              onClick={() => setIsMobileNavOpen(false)}
+            />
+            <div className="absolute left-0 top-0 bottom-0 w-64 bg-slate-900 border-r border-white/10 shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
+              <div className="h-16 flex items-center justify-between px-4 border-b border-white/5">
+                <span className="font-bold text-emerald-400 text-lg">Menu</span>
+                <button
+                  onClick={() => setIsMobileNavOpen(false)}
+                  className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-1">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsMobileNavOpen(false)}
+                      className="flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm font-medium text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10"
+                    >
+                      <Icon className="w-5 h-5" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    onClick={() => setIsMobileNavOpen(false)}
-                    className="flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm font-medium text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/10"
-                  >
-                    <Icon className="w-5 h-5" />
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
     </header>
   );
 }

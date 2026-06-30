@@ -109,9 +109,11 @@ export function ClientModal({
       {mode === 'create' ? (
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
+          title="Nuevo Cliente"
         >
-          <Plus className="w-4 h-4" /> Nuevo Cliente
+          <Plus className="w-4 h-4" />{' '}
+          <span className="hidden sm:inline">Nuevo Cliente</span>
         </button>
       ) : (
         <button
@@ -221,7 +223,10 @@ export function ClientModal({
                           const number = data.phone.startsWith(currentPrefix)
                             ? data.phone.slice(currentPrefix.length).trim()
                             : data.phone;
-                          setData({ ...data, phone: `${prefix} ${number}`.trim() });
+                          setData({
+                            ...data,
+                            phone: `${prefix} ${number}`.trim(),
+                          });
                         }}
                         options={[
                           { value: '+51', code: 'pe' },
@@ -248,17 +253,15 @@ export function ClientModal({
                       />
                       <input
                         type="text"
-                        value={
-                          (() => {
-                            const currentPrefix =
-                              ['+51', '+54', '+56', '+57', '+58', '+593'].find(
-                                (p) => data.phone.startsWith(p)
-                              ) || '+51';
-                            return data.phone.startsWith(currentPrefix)
-                              ? data.phone.slice(currentPrefix.length).trim()
-                              : data.phone;
-                          })()
-                        }
+                        value={(() => {
+                          const currentPrefix =
+                            ['+51', '+54', '+56', '+57', '+58', '+593'].find(
+                              (p) => data.phone.startsWith(p)
+                            ) || '+51';
+                          return data.phone.startsWith(currentPrefix)
+                            ? data.phone.slice(currentPrefix.length).trim()
+                            : data.phone;
+                        })()}
                         onChange={(e) => {
                           const currentPrefix =
                             ['+51', '+54', '+56', '+57', '+58', '+593'].find(
@@ -314,7 +317,6 @@ export function ClientModal({
                     searchable={true}
                   />
                 </div>
-
 
                 {/* Error is now handled by toast */}
               </div>
