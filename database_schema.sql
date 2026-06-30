@@ -134,6 +134,16 @@ ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.calendar_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.roles;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.areas;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.users;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.clients;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.projects;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.proformas;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.products;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.calendar_events;
+DROP POLICY IF EXISTS "Permitir todo a autenticados" ON public.notifications;
+
 CREATE POLICY "Permitir todo a autenticados" ON public.roles FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Permitir todo a autenticados" ON public.areas FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Permitir todo a autenticados" ON public.users FOR ALL USING (auth.role() = 'authenticated');
@@ -148,6 +158,10 @@ CREATE POLICY "Permitir todo a autenticados" ON public.notifications FOR ALL USI
 -- 🗂 BUCKET DE AVATARES
 -- ==============================================================================
 INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true) ON CONFLICT (id) DO NOTHING;
+DROP POLICY IF EXISTS "Avatar images are publicly accessible." ON storage.objects;
+DROP POLICY IF EXISTS "Anyone can upload an avatar." ON storage.objects;
+DROP POLICY IF EXISTS "Anyone can update their own avatar." ON storage.objects;
+
 CREATE POLICY "Avatar images are publicly accessible." ON storage.objects FOR SELECT USING (bucket_id = 'avatars');
 CREATE POLICY "Anyone can upload an avatar." ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'avatars');
 CREATE POLICY "Anyone can update their own avatar." ON storage.objects FOR UPDATE WITH CHECK (bucket_id = 'avatars');
