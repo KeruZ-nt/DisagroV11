@@ -62,6 +62,33 @@ export function NotificationBell({ userId }: { userId: string }) {
 
     loadNotifications();
 
+    const playNotificationSound = () => {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContextClass) return;
+        
+        const audioCtx = new AudioContextClass();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.02);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.2);
+      } catch (e) {
+        console.error('No se pudo reproducir el sonido', e);
+      }
+    };
+
     // Suscribirse a cambios en tiempo real
     const channel = supabase
       .channel('schema-db-changes')
@@ -78,6 +105,7 @@ export function NotificationBell({ userId }: { userId: string }) {
             setNotifications((prev) => [payload.new as Notification, ...prev]);
             setUnreadCount((prev) => prev + 1);
             setIsRinging(true);
+            playNotificationSound();
             setTimeout(() => setIsRinging(false), 3000); // Ring for 3 seconds
           }
         }
