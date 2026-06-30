@@ -23,6 +23,9 @@ export interface User {
   roles?: {
     name: string;
     is_system_admin: boolean;
+    areas?: {
+      name: string;
+    };
   };
 }
 

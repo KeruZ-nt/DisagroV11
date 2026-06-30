@@ -121,21 +121,23 @@ export function ClientHistoryModal({
   const getAllowedRole = () => {
     switch (newTitle) {
       case 'Cotización de productos':
-        return 'ejecutivo';
+        return { role: 'ejecutivo', area: 'ventas' };
       case 'Instalación de sistema':
       case 'Mantenimiento':
       case 'Soporte Técnico':
       case 'Asesoría Técnica':
-        return 'especialista';
+        return { role: 'especialista', area: 'operaciones' };
       default:
         return null;
     }
   };
 
-  const allowedRole = getAllowedRole();
+  const allowedRoleInfo = getAllowedRole();
   const filteredSalespeople = salespeople.filter((u: User) => {
-    if (!allowedRole) return true; // si no hay regla, mostrar todos o ninguno (aquí muestro todos)
-    return u.roles?.name?.toLowerCase().includes(allowedRole);
+    if (!allowedRoleInfo) return true; // si no hay regla, mostrar todos
+    const matchRole = u.roles?.name?.toLowerCase().includes(allowedRoleInfo.role);
+    const matchArea = u.roles?.areas?.name?.toLowerCase().includes(allowedRoleInfo.area);
+    return matchRole && matchArea;
   });
 
   return createPortal(
@@ -226,9 +228,9 @@ export function ClientHistoryModal({
                   <div>
                     <label className="block text-xs font-medium text-slate-400 mb-1.5 flex items-center justify-between">
                       <span>Asignar Encargado</span>
-                      {allowedRole && (
+                      {allowedRoleInfo && (
                         <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">
-                          Filtro: {allowedRole}
+                          Filtro: {allowedRoleInfo.role} ({allowedRoleInfo.area})
                         </span>
                       )}
                     </label>
@@ -239,7 +241,7 @@ export function ClientHistoryModal({
                         { value: '', label: '-- Sin asignar --' },
                         ...filteredSalespeople.map((u: User) => ({
                           value: u.id,
-                          label: `${u.name} (${u.roles?.name || 'Sin rol'})`,
+                          label: `${u.name} (${u.roles?.name || 'Sin rol'} - ${u.roles?.areas?.name || 'Sin área'})`,
                         })),
                       ]}
                       placeholder={!newTitle ? "Primero seleccione un Asunto" : "Seleccionar..."}
