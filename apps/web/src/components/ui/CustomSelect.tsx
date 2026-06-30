@@ -32,6 +32,7 @@ export function CustomSelect({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
   const filteredOptions = searchable 
@@ -46,7 +47,8 @@ export function CustomSelect({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        !containerRef.current.contains(event.target as Node) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(event.target as Node))
       ) {
         setIsOpen(false);
       }
@@ -122,6 +124,7 @@ export function CustomSelect({
       {isOpen &&
         createPortal(
           <div
+            ref={dropdownRef}
             className="fixed z-[9999] bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 flex flex-col animate-in fade-in zoom-in-95 duration-200"
             style={dropdownStyle}
           >

@@ -206,6 +206,7 @@ export function ClientHistoryModal({
                       { value: 'Otro', label: 'Otro' },
                     ]}
                     placeholder="Seleccione el asunto..."
+                    searchable={true}
                   />
                 </div>
 
