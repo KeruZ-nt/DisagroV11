@@ -16,6 +16,7 @@ export function SecurityForm({
   const [isEditingEmail, setIsEditingEmail] = useState(false);
 
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   const handleUpdateEmail = async (e: React.FormEvent) => {
@@ -61,6 +62,10 @@ export function SecurityForm({
       toast.error('La contraseña debe tener al menos 8 caracteres');
       return;
     }
+    if (newPassword !== confirmPassword) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
 
     setIsUpdatingPassword(true);
     try {
@@ -71,6 +76,7 @@ export function SecurityForm({
 
       toast.success('Contraseña actualizada correctamente.');
       setNewPassword('');
+      setConfirmPassword('');
     } catch (err) {
       toast.error((err as Error).message);
     } finally {
@@ -169,9 +175,21 @@ export function SecurityForm({
               placeholder="Mínimo 8 caracteres"
             />
           </div>
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-slate-400">Repetir Nueva Contraseña</label>
+            <input
+              type="password"
+              required
+              minLength={8}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              placeholder="Repite la nueva contraseña"
+            />
+          </div>
           <div className="mt-auto pt-4">
             <button
-              disabled={isUpdatingPassword || !newPassword}
+              disabled={isUpdatingPassword || !newPassword || !confirmPassword}
               className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isUpdatingPassword && <Loader2 className="w-4 h-4 animate-spin" />}
