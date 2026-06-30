@@ -15,7 +15,7 @@ export const Route = createFileRoute('/dashboard/proformas')({
 });
 
 function ProformasPage() {
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string, projectId: string } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { data: sessionData } = useQuery({
@@ -100,16 +100,16 @@ function ProformasPage() {
   });
 
   const handleDeleteConfirm = async () => {
-    if (!deleteTargetId) return;
+    if (!deleteTarget) return;
     setIsDeleting(true);
     try {
-      await deleteProforma(deleteTargetId);
+      await deleteProforma(deleteTarget.id, deleteTarget.projectId);
       refetch();
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
       setIsDeleting(false);
-      setDeleteTargetId(null);
+      setDeleteTarget(null);
     }
   };
 
@@ -118,12 +118,12 @@ function ProformasPage() {
   return (
     <div className="animate-in fade-in duration-500 h-full flex flex-col min-h-0 pb-2">
       <ConfirmModal
-        isOpen={!!deleteTargetId}
+        isOpen={!!deleteTarget}
         title="Eliminar proforma"
         message="¿Estás seguro de que deseas eliminar esta proforma? Esta acción no se puede deshacer."
         isConfirming={isDeleting}
         onConfirm={handleDeleteConfirm}
-        onCancel={() => setDeleteTargetId(null)}
+        onCancel={() => setDeleteTarget(null)}
       />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>
@@ -230,7 +230,7 @@ function ProformasPage() {
                         projectId={prof.projectId}
                       />
                       <button
-                        onClick={() => setDeleteTargetId(prof.id)}
+                        onClick={() => setDeleteTarget({ id: prof.id, projectId: prof.projectId })}
                         title="Eliminar"
                         className="text-slate-400 hover:text-red-400 transition-colors p-1.5 rounded hover:bg-red-500/10"
                       >
