@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function CalendarModal({
   isOpen,
@@ -50,6 +51,7 @@ export function CalendarModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const queryClient = useQueryClient();
 
   const showToast = (message: string) => {
     setError(message);
@@ -140,6 +142,8 @@ export function CalendarModal({
     setIsSaving(true);
     try {
       await deleteCalendarEvent(existingEvent.id as string);
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['calendar'] });
       if (onSuccess) onSuccess();
       handleClose();
     } catch (err: unknown) {
@@ -207,6 +211,8 @@ export function CalendarModal({
         });
       }
 
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['calendar'] });
       if (onSuccess) onSuccess();
       handleClose();
     } catch (err: unknown) {
