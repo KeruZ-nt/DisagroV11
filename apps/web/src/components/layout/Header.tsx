@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { NotificationBell } from './NotificationBell';
 
 export function Header({
@@ -177,7 +178,7 @@ export function Header({
       </div>
 
       {/* Mobile Navigation Overlay */}
-      {isMobileNavOpen && (
+      {isMobileNavOpen && createPortal(
         <div className="fixed inset-0 z-[100] md:hidden">
           <div
             className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
@@ -210,7 +211,8 @@ export function Header({
               })}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
