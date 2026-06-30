@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { CreateUserModal } from './CreateUserModal';
 import { EditRoleModal } from './EditRoleModal';
+import { deleteUser } from '@/lib/api/management';
 
 export type TeamMember = {
   id: string;
@@ -25,23 +26,40 @@ export function TeamList({
 }: { team: TeamMember[]; isAdmin: boolean; availableRoles: RoleData[] }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
-  const [deleteWarning, setDeleteWarning] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string, name: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
 
   const handleDelete = (id: string, name: string) => {
-    setDeleteWarning(name);
+    setDeleteTarget({ id, name });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setIsDeleting(true);
+    try {
+      await deleteUser(deleteTarget.id);
+      toast.success(`Usuario ${deleteTarget.name} eliminado exitosamente`);
+      queryClient.invalidateQueries({ queryKey: ['teamList'] });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setIsDeleting(false);
+      setDeleteTarget(null);
+    }
   };
 
   return (
     <>
       <ConfirmModal
-        isOpen={!!deleteWarning}
-        title="Acción Restringida"
-        message={`La eliminación del usuario ${deleteWarning} requiere acceso directo a Supabase por motivos de seguridad en esta versión. Póngase en contacto con el administrador de la base de datos.`}
-        confirmText="Entendido"
-        cancelText="Cerrar"
-        onConfirm={() => setDeleteWarning(null)}
-        onCancel={() => setDeleteWarning(null)}
+        isOpen={!!deleteTarget}
+        title="Eliminar Usuario"
+        message={`¿Estás seguro de que deseas eliminar permanentemente a ${deleteTarget?.name}? Esta acción no se puede deshacer.`}
+        confirmText="Sí, Eliminar"
+        cancelText="Cancelar"
+        isConfirming={isDeleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
       />
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 flex-shrink-0">
         <div>

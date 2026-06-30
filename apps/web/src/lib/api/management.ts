@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { adminAuthClient, supabase } from '@/lib/supabase';
 
 export async function getAreasAndRoles() {
   const { data: areas, error: err1 } = await supabase
@@ -69,5 +69,11 @@ export async function deleteRole(id: string) {
   const { error } = await supabase.from('roles').delete().eq('id', id);
   if (error) throw new Error(error.message);
 
+  return { success: true };
+}
+
+export async function deleteUser(userId: string) {
+  const { error } = await adminAuthClient.auth.admin.deleteUser(userId);
+  if (error) throw new Error(`No se pudo eliminar el usuario: ${error.message}`);
   return { success: true };
 }
