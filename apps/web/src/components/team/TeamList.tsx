@@ -83,7 +83,7 @@ export function TeamList({
 
       <div className="flex-1 overflow-hidden flex flex-col min-h-0 bg-slate-900/50 border border-white/5 rounded-2xl shadow-xl">
         <div className="overflow-x-auto custom-scrollbar flex-1">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[800px] text-left border-collapse">
             <thead>
               <tr className="border-b border-white/5 bg-slate-950/50">
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">

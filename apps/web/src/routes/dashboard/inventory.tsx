@@ -121,7 +121,7 @@ function InventoryPage() {
         </div>
 
         <div className="flex-1 overflow-auto custom-scrollbar">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[800px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-950/40 text-slate-400 text-xs uppercase tracking-wider">
                 <th className="px-6 py-4 font-medium">Producto</th>

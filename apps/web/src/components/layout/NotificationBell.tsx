@@ -134,7 +134,7 @@ export function NotificationBell({ userId }: { userId: string }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="fixed left-4 right-4 top-[70px] sm:absolute sm:left-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-96 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="p-4 border-b border-white/10 flex items-center justify-between bg-slate-800/40">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Bell className="w-4 h-4 text-emerald-400" />

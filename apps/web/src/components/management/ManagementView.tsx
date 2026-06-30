@@ -219,7 +219,7 @@ export function ManagementView({
             </div>
 
             <div className="lg:col-span-2 bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden">
-              <table className="w-full text-left">
+              <table className="w-full min-w-[800px] text-left">
                 <thead className="bg-slate-950/50 border-b border-white/5">
                   <tr>
                     <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase">
@@ -345,7 +345,7 @@ export function ManagementView({
             </div>
 
             <div className="lg:col-span-2 bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden">
-              <table className="w-full text-left">
+              <table className="w-full min-w-[800px] text-left">
                 <thead className="bg-slate-950/50 border-b border-white/5">
                   <tr>
                     <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase">
