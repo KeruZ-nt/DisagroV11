@@ -110,10 +110,10 @@ export function ClientModal({
       {mode === 'create' ? (
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
+          className="flex items-center justify-center gap-2 w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20 self-start sm:self-auto"
           title="Nuevo Cliente"
         >
-          <Plus className="w-4 h-4" />{' '}
+          <Plus className="w-4 h-4 shrink-0" />
           <span className="hidden sm:inline">Nuevo Cliente</span>
         </button>
       ) : (
