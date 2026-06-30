@@ -185,9 +185,9 @@ export function ProformaGenerator({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-full min-h-0">
+    <div className="flex flex-col lg:flex-row h-full min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar">
       {/* Formulario Dinámico (Izquierda) */}
-      <div className="w-full lg:w-[45%] p-6 overflow-y-auto custom-scrollbar border-r border-white/5 flex flex-col">
+      <div className="w-full lg:w-[45%] p-6 lg:overflow-y-auto custom-scrollbar border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col flex-shrink-0 lg:flex-shrink">
         <h3 className="text-lg font-semibold text-slate-200 mb-6 flex items-center gap-2 flex-shrink-0">
           <FileText className="w-5 h-5 text-emerald-400" />
           Datos del Cliente y Proyecto
