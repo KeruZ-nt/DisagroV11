@@ -223,12 +223,12 @@ export function ClientModal({
                           })
                         }
                         options={[
-                          { value: '+51', label: '+51' },
-                          { value: '+54', label: '+54' },
-                          { value: '+56', label: '+56' },
-                          { value: '+57', label: '+57' },
-                          { value: '+58', label: '+58' },
-                          { value: '+593', label: '+593' },
+                          { value: '+51', label: '🇵🇪 +51' },
+                          { value: '+54', label: '🇦🇷 +54' },
+                          { value: '+56', label: '🇨🇱 +56' },
+                          { value: '+57', label: '🇨🇴 +57' },
+                          { value: '+58', label: '🇻🇪 +58' },
+                          { value: '+593', label: '🇪🇨 +593' },
                         ]}
                         className="w-[100px] border-r border-white/10 shrink-0"
                         buttonClassName="w-full h-full bg-transparent px-3 py-2.5"
@@ -281,6 +281,7 @@ export function ClientModal({
                       'Ucayali',
                     ].map((dep) => ({ value: dep, label: dep }))}
                     placeholder="Seleccione un departamento..."
+                    searchable={true}
                   />
                 </div>
 

@@ -14,6 +14,7 @@ type CustomSelectProps = {
   buttonClassName?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
+  searchable?: boolean;
 };
 
 export function CustomSelect({
@@ -25,11 +26,16 @@ export function CustomSelect({
   buttonClassName = 'bg-black/20 border border-white/10 rounded-xl px-4 py-2.5',
   icon,
   disabled = false,
+  searchable = false,
 }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
+  const filteredOptions = searchable 
+    ? options.filter(opt => opt.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    : options;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -44,6 +50,13 @@ export function CustomSelect({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Reset search term when opening
+  useEffect(() => {
+    if (isOpen) {
+      setSearchTerm('');
+    }
+  }, [isOpen]);
 
   return (
     <div className={`relative ${className}`} ref={containerRef}>
@@ -75,9 +88,22 @@ export function CustomSelect({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto custom-scrollbar animate-in fade-in slide-in-from-top-2 duration-200">
-          <ul className="py-1">
-            {options.map((option) => (
+        <div className="absolute z-50 w-full mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-60 flex flex-col animate-in fade-in slide-in-from-top-2 duration-200">
+          {searchable && (
+            <div className="p-2 border-b border-white/10 shrink-0">
+              <input 
+                type="text" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                placeholder="Buscar..."
+                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-emerald-500/50"
+                autoFocus
+              />
+            </div>
+          )}
+          <ul className="py-1 overflow-y-auto custom-scrollbar flex-1">
+            {filteredOptions.map((option) => (
               <li
                 key={option.value}
                 onClick={() => {
@@ -93,7 +119,7 @@ export function CustomSelect({
                 {option.label}
               </li>
             ))}
-            {options.length === 0 && (
+            {filteredOptions.length === 0 && (
               <li className="px-4 py-3 text-sm text-slate-500 text-center">
                 No hay opciones
               </li>
