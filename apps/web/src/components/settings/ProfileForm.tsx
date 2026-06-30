@@ -152,6 +152,12 @@ export function ProfileForm({
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                onBlur={() => {
+                  const p = phone.trim();
+                  if (p && !p.startsWith('+')) {
+                    setPhone('+51 ' + p);
+                  }
+                }}
                 placeholder="Ej. +51 999 999 999"
                 className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
               />
