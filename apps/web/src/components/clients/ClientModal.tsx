@@ -136,8 +136,8 @@ export function ClientModal({
               className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
-            <div className="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
-              <div className="flex items-center justify-between p-5 border-b border-white/5 bg-slate-950/50">
+            <div className="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-between p-5 border-b border-white/5 bg-slate-950/50 rounded-t-2xl">
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                   {mode === 'create'
                     ? 'Registrar Nuevo Cliente'
@@ -316,7 +316,7 @@ export function ClientModal({
                 )}
               </div>
 
-              <div className="p-5 border-t border-white/5 bg-slate-950/30 flex justify-end gap-3">
+              <div className="p-5 border-t border-white/5 bg-slate-950/30 flex justify-end gap-3 rounded-b-2xl">
                 <button
                   onClick={() => setIsOpen(false)}
                   className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
