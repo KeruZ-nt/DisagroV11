@@ -6,7 +6,7 @@ import { deleteProforma } from '@/lib/api/proformas';
 import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { FileText, Filter, Search, Trash2 } from 'lucide-react';
+import { FileText, Filter, Search, Trash2, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -15,6 +15,8 @@ export const Route = createFileRoute('/dashboard/proformas')({
 });
 
 function ProformasPage() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     projectId: string;
@@ -147,17 +149,7 @@ function ProformasPage() {
             userId={sessionData.id}
             isAdmin={isAdmin}
             salespeople={salespeople}
-            isOpen={isCreateModalOpen}
-            onOpenChange={setIsCreateModalOpen}
           />
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
-            title="Nueva Proforma"
-          >
-            <Plus className="w-4 h-4 shrink-0" />
-            <span>Nueva Proforma</span>
-          </button>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-slate-300 text-sm font-medium transition-colors"

@@ -1,8 +1,7 @@
 import { supabase } from '@/lib/supabase';
 
 export async function getCalendarEvents(userId: string, userRole: string) {
-  // 1. Obtener eventos manuales y automáticos gracias a RLS
-  const { data: events, error: eventsError } = await supabase
+  let query = supabase
     .from('calendar_events')
     .select(`
       id,
@@ -11,8 +10,15 @@ export async function getCalendarEvents(userId: string, userRole: string) {
       event_date,
       related_project_id,
       target_role_id,
-      target_area_id
+      target_area_id,
+      user_id
     `);
+
+  if (userRole !== 'ADMIN') {
+    query = query.eq('user_id', userId);
+  }
+
+  const { data: events, error: eventsError } = await query;
 
   if (eventsError) console.error('Error fetching events:', eventsError);
 
