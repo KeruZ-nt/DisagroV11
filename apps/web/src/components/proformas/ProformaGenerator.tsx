@@ -394,20 +394,23 @@ export function ProformaGenerator({
           <div className="flex gap-3 flex-wrap">
             <button
               onClick={handleSave}
-              className="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-sm"
+              title="Guardar"
+              className="flex-1 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-sm"
             >
-              <Save className="w-4 h-4" />
-              Guardar
+              <Save className="w-5 h-5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Guardar</span>
             </button>
             <button
               onClick={handleDownload}
-              className="flex-1 min-w-[120px] flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-blue-500/20 text-sm"
+              title="Descargar PDF"
+              className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-blue-500/20 text-sm"
             >
-              <Download className="w-4 h-4" />
-              Descargar PDF
+              <Download className="w-5 h-5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Descargar PDF</span>
             </button>
             <button
               type="button"
+              title="Enviar por Correo"
               onClick={() => {
                 setError(null);
                 if (!data.clientEmail) {
@@ -426,8 +429,8 @@ export function ProformaGenerator({
               }}
               className="flex-1 flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-medium py-3 rounded-xl transition-all text-sm"
             >
-              <Send className="w-4 h-4" />
-              Enviar por Correo
+              <Send className="w-5 h-5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Enviar por Correo</span>
             </button>
           </div>
         </div>
