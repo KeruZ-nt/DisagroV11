@@ -245,7 +245,15 @@ export function ProformaGenerator({
                 Válido Hasta
               </label>
               <CustomDatePicker
-                selected={data.validUntil ? new Date(data.validUntil + 'T12:00:00') : null}
+                selected={
+                  data.validUntil
+                    ? new Date(
+                        data.validUntil.includes('T')
+                          ? data.validUntil
+                          : data.validUntil + 'T12:00:00'
+                      )
+                    : null
+                }
                 onChange={(date) => {
                   if (date) {
                     const yyyy = date.getFullYear();
