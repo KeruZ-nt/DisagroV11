@@ -281,10 +281,10 @@ export function CalendarView({
                       <span>{event.title as string}</span>
                     </div>
 
-                    {!event.is_auto && (
+                    {!(event.is_auto as boolean) && (
                       <button
                         onClick={(e) =>
-                          handleDelete(event.id, event.is_auto, e)
+                          handleDelete(event.id as string, event.is_auto as boolean, e)
                         }
                         className="hidden md:flex absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800/90 rounded p-1 shadow-md opacity-0 group-hover/event:opacity-100"
                       >
