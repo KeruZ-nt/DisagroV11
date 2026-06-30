@@ -1,6 +1,14 @@
 import { adminAuthClient, supabase } from '@/lib/supabase';
 import { useNavigate } from '@tanstack/react-router';
-import { AlertCircle, Eye, EyeOff, Loader2, UserPlus, X } from 'lucide-react';
+import {
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Loader2,
+  Save,
+  UserPlus,
+  X,
+} from 'lucide-react';
 import { useState } from 'react';
 
 export function CreateUserModal({
@@ -205,20 +213,26 @@ export function CreateUserModal({
             <button
               type="button"
               onClick={handleClose}
-              className="px-5 py-2 text-slate-300 hover:text-white font-medium transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-5 py-2 text-slate-300 hover:text-white font-medium transition-colors"
+              title="Cancelar"
             >
-              Cancelar
+              <X className="w-4 h-4" />{' '}
+              <span className="hidden sm:inline">Cancelar</span>
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all shadow-lg shadow-emerald-500/20"
+              className="flex items-center gap-2 px-3 sm:px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all shadow-lg shadow-emerald-500/20"
+              title={isSaving ? 'Guardando...' : 'Crear Usuario'}
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                'Crear Usuario'
+                <Save className="w-4 h-4" />
               )}
+              <span className="hidden sm:inline">
+                {isSaving ? 'Guardando...' : 'Crear Usuario'}
+              </span>
             </button>
           </div>
         </form>

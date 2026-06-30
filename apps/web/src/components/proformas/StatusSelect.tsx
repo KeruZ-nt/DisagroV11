@@ -1,7 +1,7 @@
-import { toast } from 'sonner';
 import { updateProformaStatus } from '@/lib/api/proformas';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export function StatusSelect({
   proformaId,

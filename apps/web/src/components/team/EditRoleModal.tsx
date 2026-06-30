@@ -1,7 +1,7 @@
-import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
-import { Loader2, Shield, X } from 'lucide-react';
+import { Loader2, Save, Shield, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import type { RoleData, TeamMember } from './TeamList';
 
 export function EditRoleModal({
@@ -133,20 +133,26 @@ export function EditRoleModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2 text-slate-300 hover:text-white font-medium transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-5 py-2 text-slate-300 hover:text-white font-medium transition-colors"
+              title="Cancelar"
             >
-              Cancelar
+              <X className="w-4 h-4" />{' '}
+              <span className="hidden sm:inline">Cancelar</span>
             </button>
             <button
               type="submit"
               disabled={isSaving || !roleId}
-              className="flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all shadow-lg shadow-emerald-500/20"
+              className="flex items-center gap-2 px-3 sm:px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all shadow-lg shadow-emerald-500/20"
+              title={isSaving ? 'Guardando...' : 'Guardar Cambios'}
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                'Guardar Cambios'
+                <Save className="w-4 h-4" />
               )}
+              <span className="hidden sm:inline">
+                {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+              </span>
             </button>
           </div>
         </form>

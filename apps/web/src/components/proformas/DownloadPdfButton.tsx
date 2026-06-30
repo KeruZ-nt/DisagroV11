@@ -1,6 +1,6 @@
-import { toast } from 'sonner';
 import { FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { ProformaDocument } from './ProformaDocument'; // Importación correcta
 import type { ProformaData } from './ProformaGenerator';
 

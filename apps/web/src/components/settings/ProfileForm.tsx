@@ -1,10 +1,10 @@
-import { toast } from 'sonner';
 import { updateUserProfile } from '@/lib/api/settings';
 import { supabase } from '@/lib/supabase';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Camera, CheckCircle2, Loader2, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export function ProfileForm({
   profile,
@@ -155,7 +155,7 @@ export function ProfileForm({
                 onBlur={() => {
                   const p = phone.trim();
                   if (p && !p.startsWith('+')) {
-                    setPhone('+51 ' + p);
+                    setPhone(`+51 ${p}`);
                   }
                 }}
                 placeholder="Ej. +51 999 999 999"
@@ -182,14 +182,15 @@ export function ProfileForm({
                 isSaving ||
                 (name === profile.name && phone === (profile.phone || ''))
               }
-              className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20"
+              className="flex items-center gap-2 px-3 sm:px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20"
+              title={isSaving ? 'Guardando...' : 'Guardar Cambios'}
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <Save className="w-4 h-4" />
               )}
-              Guardar Cambios
+              <span className="hidden sm:inline">Guardar Cambios</span>
             </button>
           </div>
         </div>

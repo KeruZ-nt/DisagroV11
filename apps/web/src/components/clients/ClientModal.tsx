@@ -1,9 +1,11 @@
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { createClientRecord, updateClientRecord } from '@/lib/api/clients';
 import { useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import {
   Building2,
+  Loader2,
   Mail,
   MapPin,
   Phone,
@@ -16,7 +18,6 @@ import {
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
 
 import type { User as UserType } from '@/types';
 
@@ -324,22 +325,30 @@ export function ClientModal({
               <div className="p-5 border-t border-white/5 bg-slate-950/30 flex justify-end gap-3 rounded-b-2xl">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                  title="Cancelar"
                 >
-                  Cancelar
+                  <X className="w-4 h-4" />{' '}
+                  <span className="hidden sm:inline">Cancelar</span>
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saveMutation.isPending}
-                  className="flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
+                  className="flex items-center gap-2 px-3 sm:px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20"
+                  title={
+                    saveMutation.isPending ? 'Guardando...' : 'Guardar Cliente'
+                  }
                 >
                   {saveMutation.isPending ? (
-                    'Guardando...'
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <>
-                      <Save className="w-4 h-4" /> Guardar Cliente
-                    </>
+                    <Save className="w-4 h-4" />
                   )}
+                  <span className="hidden sm:inline">
+                    {saveMutation.isPending
+                      ? 'Guardando...'
+                      : 'Guardar Cliente'}
+                  </span>
                 </button>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { createProduct, updateProduct } from '@/lib/api/inventory';
 import { useQueryClient } from '@tanstack/react-query';
-import { FileText, Hash, Package, Tag, X } from 'lucide-react';
+import { FileText, Hash, Loader2, Package, Save, Tag, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface ProductModalProps {
@@ -164,16 +164,26 @@ export function ProductModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+              title="Cancelar"
             >
-              Cancelar
+              <X className="w-4 h-4" />{' '}
+              <span className="hidden sm:inline">Cancelar</span>
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title={isSubmitting ? 'Guardando...' : 'Guardar Producto'}
             >
-              {isSubmitting ? 'Guardando...' : 'Guardar Producto'}
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4" />
+              )}
+              <span className="hidden sm:inline">
+                {isSubmitting ? 'Guardando...' : 'Guardar Producto'}
+              </span>
             </button>
           </div>
         </form>

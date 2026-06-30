@@ -2,10 +2,10 @@ import { ClientModal } from '@/components/clients/ClientModal';
 import { ClientRow } from '@/components/clients/ClientRow';
 import { DeleteClientButton } from '@/components/clients/DeleteClientButton';
 import { supabase } from '@/lib/supabase';
+import type { Client, User as UserType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Search, User } from 'lucide-react';
-import type { Client, User as UserType } from '@/types';
 
 export const Route = createFileRoute('/dashboard/clients')({
   component: ClientsPage,

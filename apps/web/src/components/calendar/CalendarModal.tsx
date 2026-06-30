@@ -6,6 +6,7 @@ import {
   deleteCalendarEvent,
   updateCalendarEvent,
 } from '@/lib/api/calendar';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   Calendar as CalendarIcon,
   Check,
@@ -16,7 +17,6 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 export function CalendarModal({
   isOpen,
@@ -418,9 +418,11 @@ export function CalendarModal({
           <button
             type="button"
             onClick={handleClose}
-            className="px-5 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl font-medium transition-all mr-auto"
+            className="flex items-center gap-2 px-3 sm:px-5 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl font-medium transition-all mr-auto"
+            title="Cancelar"
           >
-            Cancelar
+            <X className="w-4 h-4" />{' '}
+            <span className="hidden sm:inline">Cancelar</span>
           </button>
 
           <div className="flex items-center gap-3">

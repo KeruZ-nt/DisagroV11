@@ -1,9 +1,9 @@
-import { toast } from 'sonner';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { deleteClientRecord } from '@/lib/api/clients';
+import { useQueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export function DeleteClientButton({
   clientId,

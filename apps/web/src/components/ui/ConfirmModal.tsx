@@ -1,4 +1,4 @@
-import { AlertTriangle, Loader2, X } from 'lucide-react';
+import { AlertTriangle, Check, Loader2, Trash2, X } from 'lucide-react';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -48,17 +48,26 @@ export function ConfirmModal({
           <button
             onClick={onCancel}
             disabled={isConfirming}
-            className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors disabled:opacity-50"
+            title={cancelText}
           >
-            {cancelText}
+            <X className="w-4 h-4" />{' '}
+            <span className="hidden sm:inline">{cancelText}</span>
           </button>
           <button
             onClick={onConfirm}
             disabled={isConfirming}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors disabled:opacity-50"
+            title={confirmText}
           >
-            {isConfirming && <Loader2 className="w-4 h-4 animate-spin" />}
-            {confirmText}
+            {isConfirming ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : confirmText.toLowerCase().includes('eliminar') ? (
+              <Trash2 className="w-4 h-4" />
+            ) : (
+              <Check className="w-4 h-4" />
+            )}
+            <span className="hidden sm:inline">{confirmText}</span>
           </button>
         </div>
       </div>

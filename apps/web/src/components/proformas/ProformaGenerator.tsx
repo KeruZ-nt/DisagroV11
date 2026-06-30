@@ -1,8 +1,8 @@
+import { CustomDatePicker } from '@/components/ui/CustomDatePicker';
 import { Download, FileText, Plus, Save, Send, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Suspense, lazy } from 'react';
 import { ProformaDocument } from './ProformaDocument';
-import { CustomDatePicker } from '@/components/ui/CustomDatePicker';
 
 const LazyPDFViewer = lazy(() =>
   import('@react-pdf/renderer').then((mod) => ({ default: mod.PDFViewer }))
@@ -250,7 +250,7 @@ export function ProformaGenerator({
                     ? new Date(
                         data.validUntil.includes('T')
                           ? data.validUntil
-                          : data.validUntil + 'T12:00:00'
+                          : `${data.validUntil}T12:00:00`
                       )
                     : null
                 }

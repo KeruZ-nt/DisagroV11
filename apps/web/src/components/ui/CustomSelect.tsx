@@ -138,7 +138,6 @@ export function CustomSelect({
                   onClick={(e) => e.stopPropagation()}
                   placeholder="Buscar..."
                   className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-emerald-500/50"
-                  autoFocus
                 />
               </div>
             )}

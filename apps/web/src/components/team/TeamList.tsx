@@ -1,11 +1,11 @@
-import { toast } from 'sonner';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { deleteUser } from '@/lib/api/management';
 import { useQueryClient } from '@tanstack/react-query';
 import { Edit, Mail, Shield, Trash2, User, UserPlus } from 'lucide-react';
 import { useState } from 'react';
-import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { toast } from 'sonner';
 import { CreateUserModal } from './CreateUserModal';
 import { EditRoleModal } from './EditRoleModal';
-import { deleteUser } from '@/lib/api/management';
 
 export type TeamMember = {
   id: string;

@@ -1,8 +1,10 @@
 // @ts-nocheck
 
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { createNewDraftFromHistory } from '@/lib/api/clients';
 import { getClientHistory } from '@/lib/api/clientsHistory';
 import { useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import {
   AlertCircle,
@@ -10,16 +12,15 @@ import {
   ChevronDown,
   ChevronUp,
   FileText,
+  Loader2,
   PlusCircle,
   Save,
-  X,
   Search,
+  X,
 } from 'lucide-react';
-import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
 
 import type { Client, Project, User } from '@/types';
 
@@ -114,9 +115,9 @@ export function ClientHistoryModal({
     if (!historySearch) return true;
     const term = historySearch.toLowerCase();
     return (
-      (p.title && p.title.toLowerCase().includes(term)) ||
-      (p.code && p.code.toLowerCase().includes(term)) ||
-      (p.description && p.description.toLowerCase().includes(term))
+      p.title?.toLowerCase().includes(term) ||
+      p.code?.toLowerCase().includes(term) ||
+      p.description?.toLowerCase().includes(term)
     );
   });
 
@@ -180,14 +181,17 @@ export function ClientHistoryModal({
             </h4>
             <button
               onClick={() => setIsCreatingNew(!isCreatingNew)}
-              className="text-xs font-medium bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-lg hover:bg-emerald-500/20 transition-colors flex items-center gap-1"
+              className="text-xs font-medium bg-emerald-500/10 text-emerald-400 px-2 sm:px-3 py-1.5 rounded-lg hover:bg-emerald-500/20 transition-colors flex items-center gap-1"
+              title={isCreatingNew ? 'Cancelar' : 'Nuevo Trámite'}
             >
               {isCreatingNew ? (
                 <X className="w-3.5 h-3.5" />
               ) : (
                 <PlusCircle className="w-3.5 h-3.5" />
               )}
-              {isCreatingNew ? 'Cancelar' : 'Nuevo Trámite'}
+              <span className="hidden sm:inline">
+                {isCreatingNew ? 'Cancelar' : 'Nuevo Trámite'}
+              </span>
             </button>
           </div>
 
@@ -277,15 +281,23 @@ export function ClientHistoryModal({
                 <button
                   onClick={handleCreateNewDraft}
                   disabled={draftMutation.isPending}
-                  className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+                  title={
+                    draftMutation.isPending
+                      ? 'Generando...'
+                      : 'Generar Borrador'
+                  }
                 >
                   {draftMutation.isPending ? (
-                    'Generando...'
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
                   ) : (
-                    <>
-                      <Save className="w-3.5 h-3.5" /> Generar Borrador
-                    </>
+                    <Save className="w-3.5 h-3.5" />
                   )}
+                  <span className="hidden sm:inline">
+                    {draftMutation.isPending
+                      ? 'Generando...'
+                      : 'Generar Borrador'}
+                  </span>
                 </button>
               </div>
             </div>

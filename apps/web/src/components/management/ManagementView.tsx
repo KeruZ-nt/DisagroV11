@@ -1,4 +1,4 @@
-import { toast } from 'sonner';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import {
   createArea,
   createRole,
@@ -9,8 +9,8 @@ import {
 } from '@/lib/api/management';
 import { useQueryClient } from '@tanstack/react-query';
 import { FolderGit2, Network, Pencil, Shield, Trash2, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export type AreaData = { id: string; name: string };
 export type RoleData = {

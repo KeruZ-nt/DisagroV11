@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 // @ts-nocheck
 
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { deleteCalendarEvent, updateCalendarEvent } from '@/lib/api/calendar';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -17,7 +18,6 @@ import {
   subMonths,
 } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import {
   AlertTriangle,
   Calendar as CalendarIcon,

@@ -1,12 +1,12 @@
-import { toast } from 'sonner';
 import { ExcelUploadDropzone } from '@/components/inventory/ExcelUploadDropzone';
 import { ProductModal } from '@/components/inventory/ProductModal';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { deleteProduct, getProducts } from '@/lib/api/inventory';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Edit, Package, Plus, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/dashboard/inventory')({
   component: InventoryPage,

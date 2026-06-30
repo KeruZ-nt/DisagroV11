@@ -1,7 +1,7 @@
-import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 import { Loader2, Lock, Mail } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export function SecurityForm({
   currentEmail,
