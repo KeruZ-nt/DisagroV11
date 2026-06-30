@@ -244,14 +244,14 @@ export function CalendarView({
                   : 'bg-slate-900/20 text-slate-300 hover:text-white'
             }`}
           >
-            <div className="flex justify-end mb-1">
+            <div className="flex justify-center md:justify-end mb-1">
               <span
-                className={`w-7 h-7 flex items-center justify-center rounded-full ${isSameDay(day, new Date()) ? 'bg-emerald-500 text-white' : ''}`}
+                className={`w-6 h-6 md:w-7 md:h-7 flex items-center justify-center rounded-full text-xs md:text-sm ${isSameDay(day, new Date()) ? 'bg-emerald-500 text-white font-bold' : ''}`}
               >
                 {formattedDate}
               </span>
             </div>
-            <div className="flex-1 flex flex-col gap-1 overflow-y-auto min-h-0 custom-scrollbar pr-1">
+            <div className="flex-1 flex flex-row flex-wrap md:flex-col gap-1 overflow-y-auto min-h-0 custom-scrollbar pr-1 justify-center md:justify-start items-start">
               {dayEvents.map((event: Record<string, unknown>, i) => {
                 const isDeadline = event.type === 'PROFORMA_DEADLINE';
                 return (
@@ -260,16 +260,16 @@ export function CalendarView({
                     draggable={true}
                     onDragStart={(e) => handleDragStart(e, event)}
                     onClick={(e) => handleEventClick(e, event)}
-                    className={`text-xs p-1.5 rounded-md flex items-center border relative cursor-grab active:cursor-grabbing hover:scale-[1.02] hover:brightness-125 transition-all shadow-sm hover:shadow-md hover:z-10 group/event ${
+                    className={`text-xs md:p-1.5 rounded-full md:rounded-md flex items-center md:border relative cursor-grab active:cursor-grabbing hover:scale-[1.02] hover:brightness-125 transition-all shadow-sm hover:shadow-md hover:z-10 group/event w-2 h-2 md:w-auto md:h-auto mx-auto md:mx-0 shrink-0 ${
                       isDeadline
-                        ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                        ? 'bg-rose-500 md:bg-rose-500/20 text-rose-300 md:border-rose-500/30'
                         : event.is_auto
-                          ? 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-                          : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                          ? 'bg-blue-500 md:bg-blue-500/20 text-blue-300 md:border-blue-500/30'
+                          : 'bg-emerald-500 md:bg-emerald-500/20 text-emerald-300 md:border-emerald-500/30'
                     }`}
                     title={event.title as string}
                   >
-                    <div className="flex-1 min-w-0 overflow-hidden text-ellipsis line-clamp-2">
+                    <div className="hidden md:block flex-1 min-w-0 overflow-hidden text-ellipsis line-clamp-2">
                       {!isDeadline && (
                         <span className="font-semibold mr-1">
                           {format(
@@ -286,7 +286,7 @@ export function CalendarView({
                         onClick={(e) =>
                           handleDelete(event.id, event.is_auto, e)
                         }
-                        className="absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800 rounded p-1 shadow-md"
+                        className="hidden md:flex absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800 rounded p-1 shadow-md"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
