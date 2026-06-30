@@ -308,30 +308,6 @@ export function ClientModal({
                   />
                 </div>
 
-                <div className="pt-2 border-t border-white/5">
-                  <label className="block text-xs font-medium text-emerald-400 mb-1.5">
-                    Asignar a Vendedor
-                  </label>
-                  <CustomSelect
-                    value={data.assigned_salesperson_id}
-                    onChange={(val) =>
-                      setData({ ...data, assigned_salesperson_id: val })
-                    }
-                    options={[
-                      { value: '', label: '-- Sin asignar --' },
-                      ...(salespeople?.map((s) => ({
-                        value: s.id,
-                        label: s.name,
-                      })) || []),
-                    ]}
-                    placeholder="-- Sin asignar --"
-                    className="bg-emerald-950/20 border-emerald-500/20"
-                  />
-                  <p className="mt-1 text-[10px] text-slate-500">
-                    Solo el vendedor asignado podrá ver a este cliente en su
-                    CRM.
-                  </p>
-                </div>
 
                 {error && (
                   <div className="px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-xs">

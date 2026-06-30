@@ -20,9 +20,11 @@ import { createPortal } from 'react-dom';
 
 export function ClientHistoryModal({
   client,
+  salespeople = [],
   onClose,
 }: {
   client: { id: string; name?: string; assigned_salesperson_id?: string };
+  salespeople?: any[];
   onClose: () => void;
 }) {
   const [history, setHistory] = useState<Record<string, unknown>[]>([]);
@@ -30,6 +32,7 @@ export function ClientHistoryModal({
   const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newNotes, setNewNotes] = useState('');
+  const [newSalesperson, setNewSalesperson] = useState(client.assigned_salesperson_id || '');
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -80,7 +83,7 @@ export function ClientHistoryModal({
         client.id,
         newTitle,
         newNotes,
-        client.assigned_salesperson_id
+        newSalesperson || client.assigned_salesperson_id
       );
       setNewTitle('');
       setNewNotes('');
@@ -102,9 +105,9 @@ export function ClientHistoryModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-end p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div className="absolute inset-0" onClick={onClose} />
-      <div className="relative w-full max-w-lg h-full sm:h-auto sm:max-h-[90vh] bg-[#0f172a] border border-white/10 sm:rounded-2xl shadow-2xl flex flex-col animate-in slide-in-from-right-10">
+      <div className="relative w-full max-w-lg max-h-[90vh] bg-[#0f172a] border border-white/10 sm:rounded-2xl shadow-2xl flex flex-col animate-in zoom-in-95">
         <div className="p-5 border-b border-white/5 flex items-center justify-between bg-slate-950/30 shrink-0">
           <div>
             <h3 className="font-bold text-white text-lg flex items-center gap-2">
@@ -183,6 +186,26 @@ export function ClientHistoryModal({
                     placeholder="¿Qué se le va a ofrecer? ¿Qué problema tiene que vamos a resolver?"
                   />
                 </div>
+                
+                {salespeople.length > 0 && (
+                  <div>
+                    <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                      Asignar Encargado (Opcional)
+                    </label>
+                    <CustomSelect
+                      value={newSalesperson}
+                      onChange={setNewSalesperson}
+                      options={[
+                        { value: '', label: '-- Sin asignar --' },
+                        ...salespeople.map((u: any) => ({
+                          value: u.id,
+                          label: u.name,
+                        })),
+                      ]}
+                      placeholder="Seleccionar..."
+                    />
+                  </div>
+                )}
               </div>
               {error && <p className="text-red-400 text-xs mb-3">{error}</p>}
               <div className="flex justify-end gap-2">

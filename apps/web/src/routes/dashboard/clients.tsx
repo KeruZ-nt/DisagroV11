@@ -114,7 +114,6 @@ function ClientsPage() {
               <tr className="bg-slate-950/40 text-slate-400 text-xs uppercase tracking-wider">
                 <th className="px-6 py-4 font-medium">Cliente</th>
                 <th className="px-6 py-4 font-medium">Contacto</th>
-                <th className="px-6 py-4 font-medium">Descripción / Notas</th>
                 {isAdmin && (
                   <th className="px-6 py-4 font-medium">Vendedor Asignado</th>
                 )}
@@ -128,7 +127,7 @@ function ClientsPage() {
             </thead>
             <tbody className="divide-y divide-white/5">
               {clients.map((client: any) => (
-                <ClientRow key={client.id} client={client} isAdmin={isAdmin}>
+                <ClientRow key={client.id} client={client} isAdmin={isAdmin} salespeople={salespeople}>
                   <ClientModal
                     isAdmin={isAdmin}
                     salespeople={salespeople}

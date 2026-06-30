@@ -5,8 +5,9 @@ import { ClientHistoryModal } from './ClientHistoryModal';
 export function ClientRow({
   client,
   isAdmin,
+  salespeople,
   children,
-}: { client: any; isAdmin: boolean; children: React.ReactNode }) {
+}: { client: any; isAdmin: boolean; salespeople: any[]; children: React.ReactNode }) {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   return (
@@ -73,16 +74,6 @@ export function ClientRow({
             )}
           </div>
         </td>
-        <td className="px-6 py-4 max-w-xs">
-          <p
-            className="text-xs text-slate-400 line-clamp-2"
-            title={client.notes}
-          >
-            {client.notes || (
-              <span className="italic opacity-50">Sin descripción</span>
-            )}
-          </p>
-        </td>
         {isAdmin && (
           <td className="px-6 py-4">
             <span className="text-sm text-slate-300">
@@ -111,6 +102,7 @@ export function ClientRow({
       {isHistoryOpen && (
         <ClientHistoryModal
           client={client}
+          salespeople={salespeople}
           onClose={() => setIsHistoryOpen(false)}
         />
       )}
