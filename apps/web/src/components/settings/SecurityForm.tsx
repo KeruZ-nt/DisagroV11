@@ -177,18 +177,20 @@ export function SecurityForm({
               placeholder="Mínimo 8 caracteres"
             />
           </div>
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-400">Repetir Nueva Contraseña</label>
-            <input
-              type="password"
-              required
-              minLength={8}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-              placeholder="Repite la nueva contraseña"
-            />
-          </div>
+          {newPassword.length > 0 && (
+            <div className="space-y-1 animate-in fade-in slide-in-from-top-2 duration-300">
+              <label className="text-sm font-medium text-slate-400">Repetir Nueva Contraseña</label>
+              <input
+                type="password"
+                required
+                minLength={8}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                placeholder="Repite la nueva contraseña"
+              />
+            </div>
+          )}
           <div className="mt-auto pt-4">
             <button
               disabled={isUpdatingPassword || !newPassword || !confirmPassword}
