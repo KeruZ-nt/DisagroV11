@@ -119,13 +119,12 @@ export function ClientHistoryModal({
   const getAllowedRole = () => {
     switch (newTitle) {
       case 'Cotización de productos':
-        return 'ventas';
+        return 'ejecutivo';
       case 'Instalación de sistema':
       case 'Mantenimiento':
       case 'Soporte Técnico':
-        return 'tecnico'; // o la palabra clave que usen
       case 'Asesoría Técnica':
-        return 'ingeniero';
+        return 'especialista';
       default:
         return null;
     }
@@ -294,7 +293,7 @@ export function ClientHistoryModal({
               
               {filteredHistory.length === 0 ? (
                 <p className="text-center text-sm text-slate-500 py-4">No se encontraron trámites con esa búsqueda.</p>
-              ) : (
+              ) : 
                 filteredHistory.map((project: any) => {
                   const isExpanded = expandedId === project.id;
                   return (
