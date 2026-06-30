@@ -39,6 +39,7 @@ CREATE TABLE public.users (
   id uuid REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   name text NOT NULL,
   email text NOT NULL,
+  phone text,
   role_id uuid REFERENCES public.roles(id) ON DELETE SET NULL,
   avatar_url text,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL

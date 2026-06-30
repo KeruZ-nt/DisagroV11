@@ -15,9 +15,11 @@ export function ProfileForm({
     email: string;
     role: string;
     avatar_url: string | null;
+    phone?: string | null;
   };
 }) {
   const [name, setName] = useState(profile.name);
+  const [phone, setPhone] = useState(profile.phone || '');
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url);
@@ -36,7 +38,7 @@ export function ProfileForm({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await updateUserProfile(profile.id, { name });
+      await updateUserProfile(profile.id, { name, phone });
       await queryClient.invalidateQueries(); // General invalidation
       setToastMessage('Cambios guardados correctamente.');
     } catch (err) {
@@ -144,13 +146,14 @@ export function ProfileForm({
             </div>
             <div className="space-y-1">
               <label className="text-sm font-medium text-slate-400">
-                Correo Electrónico (No modificable)
+                Número de Celular
               </label>
               <input
-                type="text"
-                value={profile.email}
-                disabled
-                className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-slate-500 cursor-not-allowed"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Ej. +51 999 999 999"
+                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
               />
             </div>
             <div className="space-y-1">
@@ -169,7 +172,7 @@ export function ProfileForm({
           <div className="pt-4 flex justify-end">
             <button
               onClick={handleSave}
-              disabled={isSaving || name === profile.name}
+              disabled={isSaving || (name === profile.name && phone === (profile.phone || ''))}
               className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20"
             >
               {isSaving ? (

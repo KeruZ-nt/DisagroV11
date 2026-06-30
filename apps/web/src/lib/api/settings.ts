@@ -16,7 +16,7 @@ export async function getUserProfile(userId: string) {
 
 export async function updateUserProfile(
   userId: string,
-  updates: { name?: string; avatar_url?: string }
+  updates: { name?: string; avatar_url?: string; phone?: string | null }
 ) {
   const { error } = await supabase
     .from('users')
