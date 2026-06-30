@@ -108,7 +108,7 @@ export function CalendarModal({
 
   if (!isOpen) return null;
 
-  const isAuto = existingEvent?.is_auto;
+  const isAuto = Boolean(existingEvent?.is_auto);
 
   if (!isAdmin && !existingEvent) {
     return (
