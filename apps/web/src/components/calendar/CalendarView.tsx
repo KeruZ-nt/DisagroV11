@@ -269,7 +269,7 @@ export function CalendarView({
                     }`}
                     title={event.title as string}
                   >
-                    <div className="hidden md:block flex-1 min-w-0 overflow-hidden text-ellipsis line-clamp-2">
+                    <div className="hidden md:block flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap pr-6">
                       {!isDeadline && (
                         <span className="font-semibold mr-1">
                           {format(
@@ -278,7 +278,7 @@ export function CalendarView({
                           )}
                         </span>
                       )}
-                      {event.title as string}
+                      <span>{event.title as string}</span>
                     </div>
 
                     {!event.is_auto && (
@@ -286,7 +286,7 @@ export function CalendarView({
                         onClick={(e) =>
                           handleDelete(event.id, event.is_auto, e)
                         }
-                        className="hidden md:flex absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800 rounded p-1 shadow-md"
+                        className="hidden md:flex absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 hover:text-white hover:bg-rose-500 hover:scale-110 transition-all bg-slate-800/90 rounded p-1 shadow-md opacity-0 group-hover/event:opacity-100"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -344,11 +344,11 @@ export function CalendarView({
               setSelectedDate(new Date());
               setIsModalOpen(true);
             }}
-            className="flex items-center justify-center gap-2 w-12 h-12 sm:w-auto sm:h-auto sm:px-5 sm:py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white hover:scale-105 rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 self-start sm:self-auto"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white hover:scale-105 rounded-xl text-sm font-medium transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"
             title="Nuevo Evento"
           >
-            <Plus className="w-5 h-5 shrink-0" />
-            <span className="hidden sm:inline">Nuevo Evento</span>
+            <Plus className="w-4 h-4 shrink-0" />
+            <span>Nuevo Evento</span>
           </button>
         )}
       </div>

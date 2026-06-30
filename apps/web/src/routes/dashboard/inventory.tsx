@@ -114,11 +114,11 @@ function InventoryPage() {
           </div>
           <button
             onClick={handleCreate}
-            className="flex items-center justify-center gap-2 w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors self-start sm:self-auto"
+            className="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors"
             title="Nuevo Producto Manual"
           >
             <Plus className="w-4 h-4 shrink-0" />
-            <span className="hidden sm:inline">Nuevo Producto Manual</span>
+            <span>Nuevo Producto Manual</span>
           </button>
         </div>
 
