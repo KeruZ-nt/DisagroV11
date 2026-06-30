@@ -72,8 +72,8 @@ export function ClientModal({
       } else {
         await createClientRecord(data);
       }
-      queryClient.invalidateQueries({ queryKey: ['clients'] });
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      await queryClient.invalidateQueries({ queryKey: ['clients'] });
+      await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       setIsOpen(false);
 
       // Reset form on success if creating

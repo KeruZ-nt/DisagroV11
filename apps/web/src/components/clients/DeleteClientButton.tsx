@@ -3,6 +3,7 @@ import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { deleteClientRecord } from '@/lib/api/clients';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function DeleteClientButton({
   clientId,
@@ -10,11 +11,13 @@ export function DeleteClientButton({
 }: { clientId: string; clientName: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
       await deleteClientRecord(clientId);
+      await queryClient.invalidateQueries({ queryKey: ['clients'] });
       setIsOpen(false);
     } catch (error) {
       console.error('Error al eliminar:', error);

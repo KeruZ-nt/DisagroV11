@@ -90,8 +90,8 @@ export function ClientHistoryModal({
       setNewTitle('');
       setNewNotes('');
       setIsCreatingNew(false);
-      queryClient.invalidateQueries({ queryKey: ['clients'] });
-      queryClient.invalidateQueries({ queryKey: ['clientDetails'] });
+      await queryClient.invalidateQueries({ queryKey: ['clients'] });
+      await queryClient.invalidateQueries({ queryKey: ['clientDetails'] });
       await loadHistory();
     } catch (err: unknown) {
       const errorMsg =
