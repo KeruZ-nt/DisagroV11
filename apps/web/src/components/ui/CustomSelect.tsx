@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 type Option = {
   value: string;
-  label: string;
+  label: React.ReactNode;
 };
 
 type CustomSelectProps = {
@@ -34,7 +34,11 @@ export function CustomSelect({
 
   const selectedOption = options.find((opt) => opt.value === value);
   const filteredOptions = searchable 
-    ? options.filter(opt => opt.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    ? options.filter(opt => 
+        typeof opt.label === 'string' 
+          ? opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+          : opt.value.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     : options;
 
   useEffect(() => {

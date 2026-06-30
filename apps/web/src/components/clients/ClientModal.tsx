@@ -204,41 +204,67 @@ export function ClientModal({
                     </label>
                     <div className="flex bg-slate-950/50 border border-white/10 rounded-xl focus-within:ring-1 focus-within:ring-emerald-500">
                       <CustomSelect
-                        value={data.phone.substring(
-                          0,
-                          data.phone.indexOf(' ') !== -1
-                            ? data.phone.indexOf(' ')
-                            : 3
-                        )}
-                        onChange={(prefix) =>
-                          setData({
-                            ...data,
-                            phone:
-                              prefix +
-                              (data.phone.substring(
-                                data.phone.indexOf(' ') !== -1
-                                  ? data.phone.indexOf(' ')
-                                  : 3
-                              ) || ''),
-                          })
+                        value={
+                          ['+51', '+54', '+56', '+57', '+58', '+593'].find(
+                            (p) => data.phone.startsWith(p)
+                          ) || '+51'
                         }
+                        onChange={(prefix) => {
+                          const currentPrefix =
+                            ['+51', '+54', '+56', '+57', '+58', '+593'].find(
+                              (p) => data.phone.startsWith(p)
+                            ) || '+51';
+                          const number = data.phone.startsWith(currentPrefix)
+                            ? data.phone.slice(currentPrefix.length).trim()
+                            : data.phone;
+                          setData({ ...data, phone: `${prefix} ${number}`.trim() });
+                        }}
                         options={[
-                          { value: '+51', label: '🇵🇪 +51' },
-                          { value: '+54', label: '🇦🇷 +54' },
-                          { value: '+56', label: '🇨🇱 +56' },
-                          { value: '+57', label: '🇨🇴 +57' },
-                          { value: '+58', label: '🇻🇪 +58' },
-                          { value: '+593', label: '🇪🇨 +593' },
-                        ]}
-                        className="w-[100px] border-r border-white/10 shrink-0"
+                          { value: '+51', code: 'pe' },
+                          { value: '+54', code: 'ar' },
+                          { value: '+56', code: 'cl' },
+                          { value: '+57', code: 'co' },
+                          { value: '+58', code: 've' },
+                          { value: '+593', code: 'ec' },
+                        ].map((c) => ({
+                          value: c.value,
+                          label: (
+                            <div className="flex items-center gap-2">
+                              <img
+                                src={`https://flagcdn.com/w20/${c.code}.png`}
+                                alt={c.code}
+                                className="w-5 h-auto rounded-[2px]"
+                              />
+                              <span>{c.value}</span>
+                            </div>
+                          ),
+                        }))}
+                        className="w-[110px] border-r border-white/10 shrink-0"
                         buttonClassName="w-full h-full bg-transparent px-3 py-2.5"
                       />
                       <input
                         type="text"
-                        value={data.phone}
-                        onChange={(e) =>
-                          setData({ ...data, phone: e.target.value })
+                        value={
+                          (() => {
+                            const currentPrefix =
+                              ['+51', '+54', '+56', '+57', '+58', '+593'].find(
+                                (p) => data.phone.startsWith(p)
+                              ) || '+51';
+                            return data.phone.startsWith(currentPrefix)
+                              ? data.phone.slice(currentPrefix.length).trim()
+                              : data.phone;
+                          })()
                         }
+                        onChange={(e) => {
+                          const currentPrefix =
+                            ['+51', '+54', '+56', '+57', '+58', '+593'].find(
+                              (p) => data.phone.startsWith(p)
+                            ) || '+51';
+                          setData({
+                            ...data,
+                            phone: `${currentPrefix} ${e.target.value}`,
+                          });
+                        }}
                         className="w-full bg-transparent px-3 py-2.5 text-sm text-slate-200 focus:outline-none"
                         placeholder="999 999 999"
                       />
