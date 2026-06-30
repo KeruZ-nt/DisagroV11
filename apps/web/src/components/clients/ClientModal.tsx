@@ -26,7 +26,6 @@ type ClientModalProps = {
     email: string;
     phone: string;
     company: string;
-    notes: string;
     location: string;
     assigned_salesperson_id: string;
   };
@@ -50,7 +49,6 @@ export function ClientModal({
     email: initialData?.email || '',
     phone: initialData?.phone || '',
     company: initialData?.company || '',
-    notes: initialData?.notes || '',
     location: initialData?.location || '',
     assigned_salesperson_id: initialData?.assigned_salesperson_id || '',
   });
@@ -85,7 +83,6 @@ export function ClientModal({
           email: '',
           phone: '',
           company: '',
-          notes: '',
           location: '',
           assigned_salesperson_id: '',
         });
@@ -308,20 +305,6 @@ export function ClientModal({
                     ].map((dep) => ({ value: dep, label: dep }))}
                     placeholder="Seleccione un departamento..."
                     searchable={true}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
-                    Descripción / Problemática
-                  </label>
-                  <textarea
-                    value={data.notes}
-                    onChange={(e) =>
-                      setData({ ...data, notes: e.target.value })
-                    }
-                    className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 min-h-[80px] resize-none"
-                    placeholder="¿Qué se le va a ofrecer? ¿Qué problema tiene que vamos a resolver?"
                   />
                 </div>
 

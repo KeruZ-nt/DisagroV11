@@ -14,6 +14,7 @@ import {
   Save,
   X,
 } from 'lucide-react';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -27,6 +28,7 @@ export function ClientHistoryModal({
   const [history, setHistory] = useState<Record<string, unknown>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
   const [newNotes, setNewNotes] = useState('');
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,17 +66,23 @@ export function ClientHistoryModal({
 
   const handleCreateNewDraft = async () => {
     setError(null);
+    if (!newTitle) {
+      setError('Debes seleccionar un tipo de trámite.');
+      return;
+    }
     if (!newNotes.trim()) {
-      setError('Debes ingresar la problemática o consulta.');
+      setError('Debes ingresar la descripción o problemática.');
       return;
     }
     setIsSavingDraft(true);
     try {
       await createNewDraftFromHistory(
         client.id,
+        newTitle,
         newNotes,
         client.assigned_salesperson_id
       );
+      setNewTitle('');
       setNewNotes('');
       setIsCreatingNew(false);
       queryClient.invalidateQueries({ queryKey: ['clients'] });
@@ -139,16 +147,43 @@ export function ClientHistoryModal({
           </div>
 
           {isCreatingNew && (
-            <div className="bg-slate-900 border border-emerald-500/30 rounded-xl p-4 mb-4 shadow-lg shadow-emerald-500/10 animate-in slide-in-from-top-2">
-              <label className="block text-xs font-medium text-emerald-400 mb-2">
-                ¿Cuál es el nuevo asunto de trámite?
-              </label>
-              <textarea
-                value={newNotes}
-                onChange={(e) => setNewNotes(e.target.value)}
-                className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 min-h-[80px] resize-none mb-3"
-                placeholder="Ej. El cliente necesita un nuevo sistema de riego para la hectárea norte..."
-              />
+            <div className="bg-slate-900 border border-emerald-500/30 rounded-xl p-5 mb-4 shadow-lg shadow-emerald-500/10 animate-in slide-in-from-top-2">
+              <h4 className="text-emerald-400 font-semibold mb-4 text-sm flex items-center gap-2">
+                <PlusCircle className="w-4 h-4" /> Registrar Nuevo Trámite
+              </h4>
+              
+              <div className="space-y-4 mb-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                    Tipo de Trámite / Asunto
+                  </label>
+                  <CustomSelect
+                    value={newTitle}
+                    onChange={setNewTitle}
+                    options={[
+                      { value: 'Cotización de productos', label: 'Cotización de productos' },
+                      { value: 'Instalación de sistema', label: 'Instalación de sistema' },
+                      { value: 'Mantenimiento', label: 'Mantenimiento' },
+                      { value: 'Soporte Técnico', label: 'Soporte Técnico' },
+                      { value: 'Asesoría Técnica', label: 'Asesoría Técnica' },
+                      { value: 'Otro', label: 'Otro' },
+                    ]}
+                    placeholder="Seleccione el asunto..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                    Descripción / Problemática
+                  </label>
+                  <textarea
+                    value={newNotes}
+                    onChange={(e) => setNewNotes(e.target.value)}
+                    className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500 min-h-[100px] resize-none"
+                    placeholder="¿Qué se le va a ofrecer? ¿Qué problema tiene que vamos a resolver?"
+                  />
+                </div>
+              </div>
               {error && <p className="text-red-400 text-xs mb-3">{error}</p>}
               <div className="flex justify-end gap-2">
                 <button
