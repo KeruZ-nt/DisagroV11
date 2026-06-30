@@ -74,15 +74,6 @@ export function ClientRow({
             )}
           </div>
         </td>
-        {isAdmin && (
-          <td className="px-6 py-4">
-            <span className="text-sm text-slate-300">
-              {client.users?.name || (
-                <span className="text-slate-500 italic">Sin asignar</span>
-              )}
-            </span>
-          </td>
-        )}
         <td className="px-6 py-4 text-sm text-slate-400">
           {new Date(client.created_at).toLocaleDateString('es-ES')}
         </td>

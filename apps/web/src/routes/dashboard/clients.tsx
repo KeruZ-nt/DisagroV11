@@ -114,9 +114,6 @@ function ClientsPage() {
               <tr className="bg-slate-950/40 text-slate-400 text-xs uppercase tracking-wider">
                 <th className="px-6 py-4 font-medium">Cliente</th>
                 <th className="px-6 py-4 font-medium">Contacto</th>
-                {isAdmin && (
-                  <th className="px-6 py-4 font-medium">Vendedor Asignado</th>
-                )}
                 <th className="px-6 py-4 font-medium">Registro</th>
                 {isAdmin && (
                   <th className="px-6 py-4 font-medium text-center">
