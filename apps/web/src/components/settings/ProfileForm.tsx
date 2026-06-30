@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useNavigate } from '@tanstack/react-router';
 import { Camera, CheckCircle2, Loader2, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function ProfileForm({
   profile,
@@ -21,6 +22,7 @@ export function ProfileForm({
   const [isUploading, setIsUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url);
   const [toastMessage, setToastMessage] = useState('');
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -35,6 +37,7 @@ export function ProfileForm({
     setIsSaving(true);
     try {
       await updateUserProfile(profile.id, { name });
+      await queryClient.invalidateQueries(); // General invalidation
       setToastMessage('Cambios guardados correctamente.');
     } catch (err) {
       toast.error((err as Error).message || 'Error al guardar');
@@ -64,6 +67,7 @@ export function ProfileForm({
       } = supabase.storage.from('avatars').getPublicUrl(filePath);
 
       await updateUserProfile(profile.id, { avatar_url: publicUrl });
+      await queryClient.invalidateQueries(); // General invalidation
       setAvatarUrl(publicUrl);
       setToastMessage('Avatar actualizado correctamente.');
     } catch (error) {
