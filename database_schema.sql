@@ -168,6 +168,16 @@ CREATE POLICY "Anyone can upload an avatar." ON storage.objects FOR INSERT WITH 
 CREATE POLICY "Anyone can update their own avatar." ON storage.objects FOR UPDATE WITH CHECK (bucket_id = 'avatars');
 
 -- ==============================================================================
+-- 📡 HABILITAR REALTIME
+-- ==============================================================================
+-- Esto es necesario para que las notificaciones lleguen en tiempo real (websockets)
+BEGIN;
+  DROP PUBLICATION IF EXISTS supabase_realtime;
+  CREATE PUBLICATION supabase_realtime;
+COMMIT;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.notifications;
+
+-- ==============================================================================
 -- 💡 DATOS INICIALES (Semilla)
 -- ==============================================================================
 INSERT INTO public.areas (id, name) VALUES 
