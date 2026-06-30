@@ -325,7 +325,7 @@ export function ClientModal({
               <div className="p-5 border-t border-white/5 bg-slate-950/30 flex justify-end gap-3 rounded-b-2xl">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                  className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
                   title="Cancelar"
                 >
                   <X className="w-4 h-4" />{' '}

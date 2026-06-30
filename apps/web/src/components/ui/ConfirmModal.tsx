@@ -48,7 +48,7 @@ export function ConfirmModal({
           <button
             onClick={onCancel}
             disabled={isConfirming}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors disabled:opacity-50"
+            className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors disabled:opacity-50"
             title={cancelText}
           >
             <X className="w-4 h-4" />{' '}

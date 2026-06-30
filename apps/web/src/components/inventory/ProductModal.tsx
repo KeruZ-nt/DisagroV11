@@ -164,7 +164,7 @@ export function ProductModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+              className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
               title="Cancelar"
             >
               <X className="w-4 h-4" />{' '}

@@ -133,7 +133,7 @@ export function EditRoleModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex items-center gap-2 px-3 sm:px-5 py-2 text-slate-300 hover:text-white font-medium transition-colors"
+              className="hidden sm:flex items-center gap-2 px-3 sm:px-5 py-2.5 text-slate-300 hover:text-white font-medium transition-colors"
               title="Cancelar"
             >
               <X className="w-4 h-4" />{' '}
