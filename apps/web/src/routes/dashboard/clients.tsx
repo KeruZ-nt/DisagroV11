@@ -35,7 +35,7 @@ function ClientsPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from('users')
-        .select('id, name, roles!inner(is_system_admin)')
+        .select('id, name, roles!inner(name, is_system_admin)')
         .eq('roles.is_system_admin', false);
       return (data as any) || [];
     },

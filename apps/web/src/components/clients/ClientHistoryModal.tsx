@@ -13,6 +13,7 @@ import {
   PlusCircle,
   Save,
   X,
+  Search,
 } from 'lucide-react';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useEffect, useState } from 'react';
@@ -33,6 +34,7 @@ export function ClientHistoryModal({
   const [newTitle, setNewTitle] = useState('');
   const [newNotes, setNewNotes] = useState('');
   const [newSalesperson, setNewSalesperson] = useState(client.assigned_salesperson_id || '');
+  const [historySearch, setHistorySearch] = useState('');
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -103,6 +105,37 @@ export function ClientHistoryModal({
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
+
+  const filteredHistory = history.filter((p: any) => {
+    if (!historySearch) return true;
+    const term = historySearch.toLowerCase();
+    return (
+      (p.title && p.title.toLowerCase().includes(term)) ||
+      (p.code && p.code.toLowerCase().includes(term)) ||
+      (p.description && p.description.toLowerCase().includes(term))
+    );
+  });
+
+  const getAllowedRole = () => {
+    switch (newTitle) {
+      case 'Cotización de productos':
+        return 'ventas';
+      case 'Instalación de sistema':
+      case 'Mantenimiento':
+      case 'Soporte Técnico':
+        return 'tecnico'; // o la palabra clave que usen
+      case 'Asesoría Técnica':
+        return 'ingeniero';
+      default:
+        return null;
+    }
+  };
+
+  const allowedRole = getAllowedRole();
+  const filteredSalespeople = salespeople.filter((u: any) => {
+    if (!allowedRole) return true; // si no hay regla, mostrar todos o ninguno (aquí muestro todos)
+    return u.roles?.name?.toLowerCase().includes(allowedRole);
+  });
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
@@ -189,21 +222,30 @@ export function ClientHistoryModal({
                 
                 {salespeople.length > 0 && (
                   <div>
-                    <label className="block text-xs font-medium text-slate-400 mb-1.5">
-                      Asignar Encargado (Opcional)
+                    <label className="block text-xs font-medium text-slate-400 mb-1.5 flex items-center justify-between">
+                      <span>Asignar Encargado</span>
+                      {allowedRole && (
+                        <span className="text-[10px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded">
+                          Filtro: {allowedRole}
+                        </span>
+                      )}
                     </label>
                     <CustomSelect
                       value={newSalesperson}
                       onChange={setNewSalesperson}
                       options={[
                         { value: '', label: '-- Sin asignar --' },
-                        ...salespeople.map((u: any) => ({
+                        ...filteredSalespeople.map((u: any) => ({
                           value: u.id,
-                          label: u.name,
+                          label: `${u.name} (${u.roles?.name || 'Sin rol'})`,
                         })),
                       ]}
-                      placeholder="Seleccionar..."
+                      placeholder={!newTitle ? "Primero seleccione un Asunto" : "Seleccionar..."}
+                      disabled={!newTitle}
                     />
+                    {!newTitle && (
+                      <p className="mt-1 text-[10px] text-amber-500/80">Bloqueado hasta elegir tipo de trámite.</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -239,9 +281,23 @@ export function ClientHistoryModal({
             </div>
           ) : (
             <div className="space-y-4">
-              {history.map((project: any) => {
-                const isExpanded = expandedId === project.id;
-                return (
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <input
+                  type="text"
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                  placeholder="Buscar trámite por código o título..."
+                  className="w-full bg-slate-950/50 border border-white/10 rounded-lg py-2 pl-9 pr-4 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                />
+              </div>
+              
+              {filteredHistory.length === 0 ? (
+                <p className="text-center text-sm text-slate-500 py-4">No se encontraron trámites con esa búsqueda.</p>
+              ) : (
+                filteredHistory.map((project: any) => {
+                  const isExpanded = expandedId === project.id;
+                  return (
                   <div
                     key={project.id}
                     className="bg-slate-900/50 border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-colors"
